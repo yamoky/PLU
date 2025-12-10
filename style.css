@@ -98,4 +98,371 @@ body {
 
 .card h1,
 .card h2,
-.card h
+.card h3 {
+  margin-bottom: 0.75rem;
+}
+
+.section-description {
+  font-size: 0.9rem;
+  color: #9ca3af;
+  margin-bottom: 1.2rem;
+}
+
+/* ---------- Boutons ---------- */
+.btn {
+  border: none;
+  border-radius: 999px;
+  padding: 0.6rem 1.1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.1s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #38bdf8, #6366f1);
+  color: #0b1120;
+  box-shadow: 0 10px 25px rgba(56, 189, 248, 0.45);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 35px rgba(56, 189, 248, 0.6);
+}
+
+.btn-secondary {
+  background: rgba(15, 23, 42, 0.9);
+  color: #e5e7eb;
+  border: 1px solid rgba(148, 163, 184, 0.6);
+}
+
+.btn-secondary:hover {
+  background: rgba(31, 41, 55, 0.9);
+}
+
+/* ---------- Barre de recherche ---------- */
+.search-bar-wrapper {
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.search-bar-wrapper input {
+  width: 100%;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  background: rgba(15, 23, 42, 0.7);
+  color: #e5e7eb;
+  padding: 0.75rem 1rem;
+  outline: none;
+  font-size: 0.95rem;
+}
+
+.search-bar-wrapper input::placeholder {
+  color: #6b7280;
+}
+
+.search-bar-wrapper input:focus {
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.7);
+}
+
+.search-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+
+/* ---------- Grille produits ---------- */
+/* auto-fit + minmax => 
+   - smartphone ~2 colonnes
+   - tablette 3 colonnes
+   - gros écran 4–5 colonnes */
+.product-grid {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+/* ---------- Carte produit ---------- */
+.product-card {
+  background: radial-gradient(circle at top, #111827, #020617);
+  border-radius: 0.9rem;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.7);
+  transition: transform 0.15s ease, box-shadow 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.9);
+  border-color: rgba(56, 189, 248, 0.7);
+}
+
+/* toutes les images produits sont carrées et recadrées */
+.product-image-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+}
+
+.product-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+/* fallback si image manquante */
+.product-image-fallback-bg {
+  background: radial-gradient(circle, #0f172a, #020617);
+}
+
+.product-image-fallback {
+  opacity: 0;
+}
+
+.product-info {
+  padding: 0.6rem 0.75rem 0.7rem;
+}
+
+.product-code {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #38bdf8;
+  margin-bottom: 0.2rem;
+}
+
+.product-name {
+  font-size: 0.9rem;
+  color: #e5e7eb;
+}
+
+/* ---------- Message aucun résultat ---------- */
+.no-results {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #f97373;
+}
+
+/* ---------- Scroll Top ---------- */
+.scroll-top-btn {
+  position: fixed;
+  right: 1.3rem;
+  bottom: 1.3rem;
+  border-radius: 999px;
+  border: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  color: #e5e7eb;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.scroll-top-btn.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(-4px);
+}
+
+/* ---------- Formulaire quiz ---------- */
+.quiz-config-form {
+  display: grid;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .quiz-config-form {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: end;
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.form-group label {
+  font-size: 0.85rem;
+  color: #e5e7eb;
+}
+
+.form-group input {
+  border-radius: 0.6rem;
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  background: rgba(15, 23, 42, 0.8);
+  color: #e5e7eb;
+  padding: 0.5rem 0.7rem;
+  outline: none;
+}
+
+.form-group input:focus {
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.7);
+}
+
+/* ---------- Quiz Panel ---------- */
+.quiz-panel {
+  margin-top: 1.5rem;
+}
+
+.quiz-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: #9ca3af;
+}
+
+.quiz-timer span {
+  font-weight: 600;
+  color: #fbbf24;
+}
+
+.quiz-progress {
+  font-weight: 500;
+  color: #e5e7eb;
+}
+
+/* Corps du quiz : image + question + réponses */
+.quiz-body {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .quiz-body {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.4fr);
+    align-items: center;
+    gap: 1.5rem;
+  }
+}
+
+.quiz-question {
+  margin-bottom: 0.8rem;
+  font-size: 1.1rem;
+}
+
+/* Image du quiz */
+.quiz-media {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+.quiz-image {
+  width: 100%;
+  max-width: 220px;
+  aspect-ratio: 1 / 1;
+  border-radius: 0.9rem;
+  object-fit: cover;
+  border: 1px solid rgba(148, 163, 184, 0.7);
+  box-shadow: 0 16px 35px rgba(15, 23, 42, 0.8);
+  background: radial-gradient(circle at top, #020617, #020617);
+}
+
+/* Réponses */
+.answers-grid {
+  display: grid;
+  gap: 0.8rem;
+}
+
+@media (min-width: 600px) {
+  .answers-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.answer-btn {
+  width: 100%;
+  justify-content: flex-start;
+}
+
+/* Styles des réponses selon la correction */
+.answer-correct {
+  background: rgba(22, 163, 74, 0.18);
+  border: 1px solid rgba(34, 197, 94, 0.8);
+  color: #bbf7d0;
+}
+
+.answer-wrong {
+  background: rgba(220, 38, 38, 0.18);
+  border: 1px solid rgba(248, 113, 113, 0.8);
+  color: #fecaca;
+}
+
+.answer-selected {
+  transform: translateY(-1px);
+}
+
+/* ---------- Résultats ---------- */
+.results-summary {
+  display: grid;
+  gap: 0.3rem;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.mistakes-list {
+  display: grid;
+  gap: 0.8rem;
+  margin: 1rem 0 1.2rem;
+}
+
+.mistake-card {
+  border-radius: 0.8rem;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  padding: 0.7rem 0.8rem;
+  background: radial-gradient(circle at top, #020617, #020617);
+  font-size: 0.9rem;
+}
+
+.mistake-card h4 {
+  margin-bottom: 0.4rem;
+  font-size: 0.9rem;
+  color: #f97316;
+}
+
+/* ---------- Footer ---------- */
+.site-footer {
+  border-top: 1px solid rgba(148, 163, 184, 0.3);
+  padding: 0.8rem 0;
+  font-size: 0.8rem;
+  color: #9ca3af;
+  background: rgba(15, 23, 42, 0.95);
+}
+
+/* ---------- Responsiveness divers ---------- */
+@media (max-width: 640px) {
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav-actions {
+    align-self: stretch;
+    justify-content: flex-start;
+  }
+}
