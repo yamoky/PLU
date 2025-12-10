@@ -1,7 +1,7 @@
 // data.js
 const PLU_DATA = [
     // --- Fruits & Légumes (codes 1 à 20) ---
-    { code: 1, nom: "Banane", image: "banane.jpg" },
+    { code: 1, nom: Banane, image: "banane.jpg" },
     { code: 2, nom: "Tomate", image: "tomate_grappe.jpg" },
     { code: 3, nom: "Concombre", image: "concombre.jpg" },
     { code: 4, nom: "Courgette", image: "courgette_vrac.jpg" },
@@ -34,3 +34,4 @@ const PLU_DATA = [
     { code: 58, nom: "Barchetta 4 Fromages", image: "barchetta_4_fromages.jpg" }, // J'ai supposé le nom d'image
     { code: 59, nom: "Pain aux Raisins", image: "pain_aux_raisins.jpg" }, // J'ai supposé le nom d'image
 ];
+
