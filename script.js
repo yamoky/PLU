@@ -45,12 +45,13 @@ function filtrerCartes() {
     }
 }
 
+// ... (reste du code filtrerCartes et construireCartes) ...
+
 // Lancement au chargement de la page
-window.onload = function() {
+document.addEventListener('DOMContentLoaded', function() {
     // Vérifier si PLU_DATA est disponible et construire les cartes
+    // Le typeof est important pour s'assurer que data.js est chargé
     if (typeof PLU_DATA !== 'undefined' && document.getElementById('cartes-container')) {
         construireCartes(PLU_DATA);
     }
-};
-
-// --- Les fonctions de tri (sortTable) ne sont plus nécessaires pour la vue par cartes. ---
+});
