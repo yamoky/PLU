@@ -1,46 +1,180 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Codes PLU LIDL - La Liste</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+/* RESET et Responsiveness de base */
+* {
+    box-sizing: border-box; 
+}
 
-    <h1>Liste des Codes PLU LIDL</h1>
+body {
+    font-family: sans-serif;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
 
-    <input type="text" id="recherche" onkeyup="filtrerTableau()" placeholder="Rechercher un code PLU ou un produit...">
+h1 {
+    color: #005A9C; /* Bleu LIDL */
+    text-align: center;
+    margin-bottom: 20px;
+}
 
-    <div class="tableau-conteneur">
-        <table id="tablePLU">
-            <thead>
-                <tr>
-                    <th onclick="sortTable(0)">Code PLU</th>
-                    <th onclick="sortTable(1)">Produit</th>
-                    <th>Image</th>
-                </tr>
-            </thead>
-            <tbody id="corpsTableau">
-                <tr>
-                    <td>1</td>
-                    <td>Banane vrac</td>
-                    <td><img src="images/banane.jpg" alt="Banane vrac"></td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Tomate grappe</td>
-                    <td><img src="images/tomate_grappe.jpg" alt="Tomate grappe"></td>
-                </tr>
-                <tr>
-                    <td>50</td>
-                    <td>Pain au chocolat pur beurre</td>
-                    <td><img src="images/pain_chocolat.jpg" alt="Pain au chocolat"></td>
-                </tr>
-                </tbody>
-        </table>
-    </div>
+/* Barre de recherche */
+#recherche {
+    width: 100%; /* Prend toute la largeur disponible */
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
 
-    <script src="script.js"></script>
-</body>
-</html>
+/* Conteneur de tableau pour gérer le défilement horizontal si nécessaire */
+.tableau-conteneur {
+    overflow-x: auto; 
+}
+
+#tablePLU {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+    background-color: white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+#tablePLU th, #tablePLU td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    vertical-align: middle;
+}
+
+#tablePLU th {
+    background-color: #005A9C;
+    color: white;
+    cursor: pointer;
+    position: sticky; /* L'entête reste visible si vous faites défiler */
+    top: 0;
+}
+
+#tablePLU tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Images */
+#tablePLU img {
+    width: 80px; 
+    height: 80px;
+    object-fit: cover; 
+    border-radius: 4px;
+}
+
+/* Bouton Quiz (réutilisé pour le quiz.html) */
+.bouton-quiz {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #FFC72C; /* Jaune LIDL */
+    color: #000;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 6px;
+    transition: background-color 0.3s;
+}
+
+.bouton-quiz:hover {
+    background-color: #ffb800;
+}
+
+/* --- ADAPTATION RESPONSIVE --- */
+
+/* Pour les tablettes et les mobiles */
+@media screen and (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    /* Réduit le padding pour gagner de la place */
+    #tablePLU th, #tablePLU td {
+        padding: 8px 10px;
+    }
+    
+    /* Assure que la colonne Code PLU (index 0) ait une largeur suffisante */
+    #tablePLU td:nth-child(1), 
+    #tablePLU th:nth-child(1) {
+        min-width: 70px; 
+    }
+}
+
+/* Pour les très petits écrans (smartphones) */
+@media screen and (max-width: 500px) {
+    
+    /* Cache la colonne Image pour maximiser l'espace pour le texte */
+    #tablePLU th:nth-child(3), 
+    #tablePLU td:nth-child(3) {
+        display: none; 
+    }
+    
+    h1 {
+        font-size: 1.5em;
+    }
+}
+
+
+/* Styles spécifiques au quiz pour la lisibilité */
+.quiz-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+.question-card {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 6px;
+    text-align: center;
+}
+.question-card img {
+    max-width: 100%;
+    height: 200px;
+    object-fit: contain;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+.choix button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #005A9C;
+    background-color: #fff;
+    color: #005A9C;
+    font-size: 1em;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.2s, color 0.2s;
+}
+.choix button:hover {
+    background-color: #005A9C;
+    color: white;
+}
+/* Feedback */
+.reponse-correcte { background-color: #4CAF50 !important; color: white !important; }
+.reponse-incorrecte { background-color: #f44336 !important; color: white !important; }
+
+.resultats {
+    text-align: center;
+    padding: 20px;
+    border: 2px dashed #005A9C;
+    border-radius: 8px;
+}
+
+/* Responsive - S'assurer que les boutons sont lisibles sur petit écran */
+@media screen and (max-width: 600px) {
+    .quiz-container {
+        padding: 10px;
+    }
+    .choix button {
+        padding: 12px 8px;
+        font-size: 0.9em;
+    }
+}
