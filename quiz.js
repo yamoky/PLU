@@ -231,12 +231,17 @@ function reinitialiserQuiz() {
     chargerNouvelleQuestion();
 }
 
+// ... (reste du code quiz.js) ...
+
 // Lancer la première question au chargement de la page
-window.onload = function() {
+document.addEventListener('DOMContentLoaded', function() {
+    // Vérifier que la liste PLU_DATA existe et n'est pas vide
     if (typeof PLU_DATA !== 'undefined' && PLU_DATA.length > 4) {
         chargerNouvelleQuestion();
     } else {
         document.getElementById('quiz-area').innerHTML = '<p style="color: red;">Erreur : La base de données PLU_DATA est manquante ou insuffisante. Vérifiez le fichier data.js.</p>';
-        document.getElementById('chrono-affichage').style.display = 'none';
+        if (document.getElementById('chrono-affichage')) {
+            document.getElementById('chrono-affichage').style.display = 'none';
+        }
     }
-};
+});
