@@ -1,54 +1,138 @@
-<!doctype html>
+<!-- quiz.html -->
+<!DOCTYPE html>
 <html lang="fr">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>PLU — Quiz</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <header class="site-header">
-    <h1>Quiz PLU</h1>
-    <nav>
-      <a href="index.html" class="btn secondary">Retour</a>
-    </nav>
-  </header>
+  <head>
+    <meta charset="UTF-8" />
+    <title>PLU Formation - Quiz</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-content">
+        <div class="logo-area">
+          <a href="index.html" class="logo-link">
+            <span class="logo">PLU<span class="logo-accent">Formation</span></span>
+          </a>
+          <p class="logo-subtitle">Quiz d’entraînement aux codes PLU</p>
+        </div>
 
-  <main class="container">
-    <section class="quiz-controls">
-      <label for="num-questions">Nombre de questions :</label>
-      <select id="num-questions">
-        <option value="5">5</option>
-        <option value="10" selected>10</option>
-        <option value="20">20</option>
-      </select>
-
-      <label for="time-per-session">Temps session (secondes) :</label>
-      <input id="time-per-session" type="number" min="10" max="3600" value="90" step="5" />
-      <button id="start-quiz" class="btn">Démarrer</button>
-    </section>
-
-    <section id="quiz-area" class="product-list-section hidden" aria-hidden="true">
-      <div id="timer" class="timer">Temps restant: <span id="timer-value">00:00</span></div>
-      <div id="question-area"></div>
-      <div id="quiz-controls" style="margin-top:10px;">
-        <button id="next-btn" class="btn">Suivant</button>
+        <nav class="nav-actions">
+          <a href="index.html" class="btn btn-secondary">Retour à l’accueil</a>
+        </nav>
       </div>
-    </section>
+    </header>
 
-    <section id="result-area" class="product-list-section hidden" aria-hidden="true">
-      <h2>Résultats</h2>
-      <div id="result-summary"></div>
-      <div id="mistakes" style="margin-top:1rem"></div>
-      <button id="restart" class="btn">Recommencer</button>
-    </section>
-  </main>
+    <main class="container main-content">
+      <!-- Configuration du quiz -->
+      <section class="card">
+        <h1>Configurer ton quiz</h1>
+        <p class="section-description">
+          Choisis le <strong>nombre de questions</strong> et la
+          <strong>durée de la session</strong>. Le quiz s’arrête
+          soit quand le temps est écoulé, soit quand tu as répondu à toutes les
+          questions.
+        </p>
 
-  <footer class="site-footer">
-    <small>&copy; PLU — yamoky</small>
-  </footer>
+        <form id="quizConfigForm" class="quiz-config-form">
+          <div class="form-group">
+            <label for="questionCount">Nombre de questions</label>
+            <input
+              id="questionCount"
+              type="number"
+              min="1"
+              max="100"
+              value="10"
+              required
+            />
+          </div>
 
-  <script src="data.js"></script>
-  <script src="quiz.js"></script>
-</body>
+          <div class="form-group">
+            <label for="quizDuration"
+              >Durée de la session (en minutes)</label
+            >
+            <input
+              id="quizDuration"
+              type="number"
+              min="1"
+              max="120"
+              value="5"
+              required
+            />
+          </div>
+
+          <button type="submit" class="btn btn-primary">
+            Lancer le quiz
+          </button>
+        </form>
+      </section>
+
+      <!-- Zone du quiz -->
+      <section id="quizPanel" class="card quiz-panel" hidden>
+        <div class="quiz-header">
+          <div class="quiz-timer">
+            ⏱ Temps restant :
+            <span id="timerDisplay">00:00</span>
+          </div>
+          <div class="quiz-progress">
+            Question <span id="currentQuestionIndex">0</span> /
+            <span id="totalQuestions">0</span>
+          </div>
+        </div>
+
+        <div class="quiz-body">
+          <h2 id="questionText" class="quiz-question"></h2>
+
+          <div id="answersContainer" class="answers-grid"></div>
+        </div>
+      </section>
+
+      <!-- Résultats -->
+      <section id="resultsPanel" class="card" hidden>
+        <h2>Résultats du quiz</h2>
+        <div class="results-summary">
+          <p>
+            Questions posées :
+            <strong><span id="resultsQuestionsCount">0</span></strong>
+          </p>
+          <p>
+            Bonnes réponses :
+            <strong><span id="resultsCorrectCount">0</span></strong>
+          </p>
+          <p>
+            Nombre d’erreurs :
+            <strong><span id="resultsErrorsCount">0</span></strong>
+          </p>
+          <p>
+            Pourcentage de réussite :
+            <strong><span id="resultsSuccessRate">0</span>%</strong>
+          </p>
+        </div>
+
+        <h3>Correction des erreurs</h3>
+        <p class="section-description">
+          Retrouve ci-dessous les questions où tu t’es trompé, avec la bonne
+          réponse.
+        </p>
+
+        <div id="mistakesList" class="mistakes-list"></div>
+
+        <button id="restartQuizBtn" class="btn btn-primary">
+          Relancer une session
+        </button>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>PLUFormation • Continue de t’entraîner pour retenir tous les PLU 💪</p>
+      </div>
+    </footer>
+
+    <script src="data.js" defer></script>
+    <script src="quiz.js" defer></script>
+  </body>
 </html>
