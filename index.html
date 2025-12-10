@@ -1,43 +1,81 @@
-<!doctype html>
+<!-- index.html -->
+<!DOCTYPE html>
 <html lang="fr">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>PLU — Produits & Quiz</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <header class="site-header">
-    <h1>PLU — Formation</h1>
-    <nav>
-      <a href="quiz.html" class="btn">Lancer un quiz</a>
-    </nav>
-  </header>
+  <head>
+    <meta charset="UTF-8" />
+    <title>PLU Formation - Accueil</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-content">
+        <div class="logo-area">
+          <span class="logo">PLU<span class="logo-accent">Formation</span></span>
+          <p class="logo-subtitle">Mémorise les codes PLU facilement</p>
+        </div>
 
-  <main class="container">
-    <section class="controls">
-      <button id="toggle-list" class="btn">Afficher la liste des produits</button>
-
-      <div class="search-wrap" aria-hidden="true" id="search-wrap">
-        <label for="search-input">Rechercher (code ou nom) :</label>
-        <input id="search-input" type="search" placeholder="Tape un code, ex: 12345, ou un nom" />
-        <small id="search-count" aria-live="polite"></small>
+        <nav class="nav-actions">
+          <a href="quiz.html" class="btn btn-primary">Lancer un quiz</a>
+        </nav>
       </div>
-    </section>
+    </header>
 
-    <section id="product-list-section" class="product-list-section hidden" aria-hidden="true">
-      <ul id="product-list" class="product-list"></ul>
-      <div id="no-results" class="no-results hidden">Aucun produit trouvé.</div>
-    </section>
-  </main>
+    <main class="container main-content">
+      <!-- Section recherche -->
+      <section class="card search-card">
+        <h1>Rechercher un produit PLU</h1>
+        <p class="section-description">
+          Tape un <strong>code PLU</strong> ou le <strong>nom du produit</strong> pour le retrouver
+          rapidement.
+        </p>
 
-  <footer class="site-footer">
-    <small>&copy; PLU — yamoky</small>
-  </footer>
+        <div class="search-bar-wrapper">
+          <input
+            id="searchInput"
+            type="text"
+            placeholder="Ex : 4011 ou Banane"
+            autocomplete="off"
+          />
+        </div>
 
-  <!-- données communes -->
-  <script src="data.js"></script>
-  <!-- logique page -->
-  <script src="script.js"></script>
-</body>
+        <div class="search-meta">
+          <span id="resultsCount">0 produit</span>
+          <button id="toggleListBtn" class="btn btn-secondary">
+            Masquer la liste
+          </button>
+        </div>
+      </section>
+
+      <!-- Section liste des produits -->
+      <section class="card">
+        <h2>Liste des produits</h2>
+        <p class="section-description">
+          Visualise tous les produits avec leur image, leur nom et leur code PLU.
+        </p>
+
+        <div id="noResultsMessage" class="no-results" hidden>
+          Aucun produit ne correspond à ta recherche.
+        </div>
+
+        <div id="productsGrid" class="product-grid"></div>
+      </section>
+    </main>
+
+    <button id="scrollTopBtn" class="scroll-top-btn" aria-label="Retour en haut">
+      ↑
+    </button>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>PLUFormation • Site d’entraînement aux codes PLU • Gratuit et ouvert à tous</p>
+      </div>
+    </footer>
+
+    <script src="data.js" defer></script>
+    <script src="script.js" defer></script>
+  </body>
 </html>
