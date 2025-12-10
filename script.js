@@ -7,6 +7,11 @@ function construireCartes(data) {
     const container = document.getElementById('cartes-container');
     container.innerHTML = ''; // Nettoyer le conteneur existant
     
+    if (!data || data.length === 0) {
+        container.innerHTML = '<p style="text-align: center; color: red; font-weight: bold;">Erreur : La base de données PLU_DATA est vide ou non chargée.</p>';
+        return;
+    }
+
     data.forEach(item => {
         const carteHTML = `
             <div class="carte-plu" data-plu="${item.code}" data-nom="${item.nom.toUpperCase()}">
@@ -45,12 +50,9 @@ function filtrerCartes() {
     }
 }
 
-// ... (reste du code filtrerCartes et construireCartes) ...
-
 // Lancement au chargement de la page
 document.addEventListener('DOMContentLoaded', function() {
     // Vérifier si PLU_DATA est disponible et construire les cartes
-    // Le typeof est important pour s'assurer que data.js est chargé
     if (typeof PLU_DATA !== 'undefined' && document.getElementById('cartes-container')) {
         construireCartes(PLU_DATA);
     }
