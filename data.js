@@ -110,7 +110,7 @@ window.PLU_DATA = (function () {
       code: "18",
       name: "Pomme bicolore",
       nom: "Pomme bicolore",
-      image: "assets/pomme_gala.jpg",
+      image: "assets/pomme_bicolore_vrac.jpg",
     },
     {
       code: "19",
@@ -190,3 +190,4 @@ window.PLU_DATA = (function () {
 
   return { products };
 })();
+
