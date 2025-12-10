@@ -7,7 +7,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
     />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style.css?v=2" />
   </head>
   <body>
     <header class="site-header">
@@ -98,48 +98,4 @@
       </section>
 
       <!-- Résultats -->
-      <section id="resultsPanel" class="card" hidden>
-        <h2>Résultats du quiz</h2>
-        <div class="results-summary">
-          <p>
-            Questions posées :
-            <strong><span id="resultsQuestionsCount">0</span></strong>
-          </p>
-          <p>
-            Bonnes réponses :
-            <strong><span id="resultsCorrectCount">0</span></strong>
-          </p>
-          <p>
-            Nombre d’erreurs :
-            <strong><span id="resultsErrorsCount">0</span></strong>
-          </p>
-          <p>
-            Pourcentage de réussite :
-            <strong><span id="resultsSuccessRate">0</span>%</strong>
-          </p>
-        </div>
-
-        <h3>Correction des erreurs</h3>
-        <p class="section-description">
-          Retrouve ci-dessous les questions où tu t’es trompé, avec la bonne
-          réponse.
-        </p>
-
-        <div id="mistakesList" class="mistakes-list"></div>
-
-        <button id="restartQuizBtn" class="btn btn-primary">
-          Relancer une session
-        </button>
-      </section>
-    </main>
-
-    <footer class="site-footer">
-      <div class="container">
-        <p>PLUFormation • Continue de t’entraîner pour retenir tous les PLU 💪</p>
-      </div>
-    </footer>
-
-    <script src="data.js" defer></script>
-    <script src="quiz.js" defer></script>
-  </body>
-</html>
+      <section id="resultsPanel" class
