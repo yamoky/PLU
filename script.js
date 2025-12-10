@@ -40,7 +40,6 @@ document.addEventListener("DOMContentLoaded", () => {
       img.loading = "lazy";
 
       img.onerror = () => {
-        // Si l'image n'existe pas, on évite un affichage cassé
         img.classList.add("product-image-fallback");
         imgWrapper.classList.add("product-image-fallback-bg");
       };
@@ -118,8 +117,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ---------- Écouteurs ----------
   searchInput.addEventListener("input", (e) => {
-    // Si la liste est masquée et qu'on tape quelque chose,
-    // on la réaffiche pour voir les résultats
     if (!isListVisible) {
       toggleListVisibility();
     }
