@@ -54,4 +54,28 @@
       <section class="card">
         <h2>Liste des produits</h2>
         <p class="section-description">
-          Visualise tous les pr
+          Visualise tous les produits avec leur image, leur nom et leur code PLU.
+        </p>
+
+        <div id="noResultsMessage" class="no-results" hidden>
+          Aucun produit ne correspond à ta recherche.
+        </div>
+
+        <div id="productsGrid" class="product-grid"></div>
+      </section>
+    </main>
+
+    <button id="scrollTopBtn" class="scroll-top-btn" aria-label="Retour en haut">
+      ↑
+    </button>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>PLUFormation • Site d’entraînement aux codes PLU • Gratuit et ouvert à tous</p>
+      </div>
+    </footer>
+
+    <script src="data.js" defer></script>
+    <script src="script.js" defer></script>
+  </body>
+</html>
