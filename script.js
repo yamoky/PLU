@@ -1,104 +1,139 @@
-// script.js - Code pour la page d'accueil (index.html) UNIQUEMENT
+// script.js
+// Logique de la page d'accueil : recherche + affichage des produits
 
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. On lance la génération de la liste au chargement de la page
-    genererCartes();
-    
-    // 2. Gestion du bouton "Retour en haut"
-    window.onscroll = function() { scrollFunction() };
-});
+document.addEventListener("DOMContentLoaded", () => {
+  const products = (window.PLU_DATA && window.PLU_DATA.products) || [];
 
-// --- Fonction pour créer les cartes HTML à partir de data.js ---
-function genererCartes() {
-    const container = document.getElementById('cartes-container');
-    
-    if (!container) return; 
+  const searchInput = document.getElementById("searchInput");
+  const productsGrid = document.getElementById("productsGrid");
+  const resultsCount = document.getElementById("resultsCount");
+  const toggleListBtn = document.getElementById("toggleListBtn");
+  const noResultsMessage = document.getElementById("noResultsMessage");
+  const scrollTopBtn = document.getElementById("scrollTopBtn");
 
-    if (typeof PLU_DATA === 'undefined') {
-        container.innerHTML = "<p style='color:red; text-align:center;'>Erreur : Le fichier data.js n'est pas chargé ou est vide.</p>";
-        console.error("PLU_DATA est introuvable.");
-        return;
+  let isListVisible = true;
+  let currentList = products.slice();
+
+  // ---------- Rendu des cartes produits ----------
+  function renderProducts(list) {
+    productsGrid.innerHTML = "";
+
+    if (!list.length) {
+      noResultsMessage.hidden = false;
+      resultsCount.textContent = "0 produit";
+      return;
     }
 
-    container.innerHTML = ''; 
+    noResultsMessage.hidden = true;
 
-    PLU_DATA.forEach(item => {
-        const carte = document.createElement('div');
-        carte.className = 'carte-plu';
-        
-        carte.setAttribute('data-nom', item.nom.toLowerCase());
-        carte.setAttribute('data-code', item.code);
+    list.forEach((product) => {
+      const card = document.createElement("article");
+      card.className = "product-card";
 
-        // Cette balise IMG va chercher les images dans le dossier 'assets/'
-        carte.innerHTML = `
-            <div class="plu-image">
-                <img src="assets/${item.image}" alt="${item.nom}" loading="lazy" onerror="this.src='https://via.placeholder.com/200?text=Image+Manquante'">
-            </div>
-            <div class="plu-nom">${item.nom}</div>
-            <div class="plu-code">${item.code}</div>
-        `;
-        
-        container.appendChild(carte);
+      const imgWrapper = document.createElement("div");
+      imgWrapper.className = "product-image-wrapper";
+
+      const img = document.createElement("img");
+      img.className = "product-image";
+      img.src = product.image || "";
+      img.alt = product.name || "Produit PLU";
+      img.loading = "lazy";
+
+      img.onerror = () => {
+        // Si l'image n'existe pas, on évite un affichage cassé
+        img.classList.add("product-image-fallback");
+        imgWrapper.classList.add("product-image-fallback-bg");
+      };
+
+      imgWrapper.appendChild(img);
+
+      const info = document.createElement("div");
+      info.className = "product-info";
+
+      const codeEl = document.createElement("p");
+      codeEl.className = "product-code";
+      codeEl.textContent = `Code PLU : ${product.code}`;
+
+      const nameEl = document.createElement("p");
+      nameEl.className = "product-name";
+      nameEl.textContent = product.name;
+
+      info.appendChild(codeEl);
+      info.appendChild(nameEl);
+
+      card.appendChild(imgWrapper);
+      card.appendChild(info);
+
+      productsGrid.appendChild(card);
     });
-}
 
-// --- Fonction de Recherche (Appelée par l'input "onkeyup" dans index.html) ---
-function filtrerCartes() {
-    const input = document.getElementById('recherche');
-    if (!input) return;
+    const count = list.length;
+    resultsCount.textContent = `${count} produit${count > 1 ? "s" : ""}`;
+  }
 
-    const filter = input.value.toLowerCase();
-    const cartes = document.getElementsByClassName('carte-plu');
+  // ---------- Recherche ----------
+  function filterProducts(query) {
+    const trimmed = query.trim().toLowerCase();
 
-    for (let i = 0; i < cartes.length; i++) {
-        const nom = cartes[i].getAttribute('data-nom');
-        const code = cartes[i].getAttribute('data-code');
-
-        if (nom.includes(filter) || code.includes(filter)) {
-            cartes[i].style.display = ""; 
-        } else {
-            cartes[i].style.display = "none";
-        }
+    if (!trimmed) {
+      currentList = products.slice();
+      renderProducts(currentList);
+      return;
     }
-}
 
-// --- Fonction Masquer/Afficher la liste ---
-function toggleListe() {
-    const container = document.getElementById('cartes-container');
-    const bouton = document.getElementById('masquer-bouton');
-    const barreRecherche = document.getElementById('recherche');
+    currentList = products.filter((p) => {
+      const code = String(p.code || "").toLowerCase();
+      const name = String(p.name || "").toLowerCase();
+      return code.includes(trimmed) || name.includes(trimmed);
+    });
 
-    if (!container) return;
+    renderProducts(currentList);
+  }
 
-    if (container.style.display === 'none') {
-        container.style.display = 'grid'; 
-        if(barreRecherche) barreRecherche.style.display = 'block';
-        if(bouton) {
-            bouton.textContent = 'Masquer la liste';
-            bouton.style.backgroundColor = '#ddd'; 
-        }
+  // ---------- Toggle affichage de la liste ----------
+  function toggleListVisibility() {
+    isListVisible = !isListVisible;
+    productsGrid.style.display = isListVisible ? "grid" : "none";
+    noResultsMessage.style.display = isListVisible ? "" : "none";
+    toggleListBtn.textContent = isListVisible
+      ? "Masquer la liste"
+      : "Afficher la liste";
+  }
+
+  // ---------- Gestion du scroll-top ----------
+  function updateScrollButton() {
+    if (window.scrollY > 200) {
+      scrollTopBtn.classList.add("visible");
     } else {
-        container.style.display = 'none';
-        if(barreRecherche) barreRecherche.style.display = 'none';
-        if(bouton) {
-            bouton.textContent = 'Afficher la liste';
-            bouton.style.backgroundColor = '#90ee90'; 
-        }
+      scrollTopBtn.classList.remove("visible");
     }
-}
+  }
 
-// --- Fonction Scroll to Top ---
-function scrollFunction() {
-    const btn = document.getElementById("scrollToTopBtn");
-    if (btn) {
-        if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-            btn.style.display = "block";
-        } else {
-            btn.style.display = "none";
-        }
+  function scrollToTop() {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }
+
+  // ---------- Écouteurs ----------
+  searchInput.addEventListener("input", (e) => {
+    // Si la liste est masquée et qu'on tape quelque chose,
+    // on la réaffiche pour voir les résultats
+    if (!isListVisible) {
+      toggleListVisibility();
     }
-}
+    filterProducts(e.target.value);
+  });
 
-function scrollToTop() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
+  toggleListBtn.addEventListener("click", () => {
+    toggleListVisibility();
+  });
+
+  window.addEventListener("scroll", updateScrollButton);
+  scrollTopBtn.addEventListener("click", scrollToTop);
+
+  // ---------- Initialisation ----------
+  renderProducts(products);
+  updateScrollButton();
+});
