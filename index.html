@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codes PLU LIDL - La Liste</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>Liste des Codes PLU LIDL</h1>
+
+    <input type="text" id="recherche" onkeyup="filtrerTableau()" placeholder="Rechercher un code PLU ou un produit...">
+
+    <div class="tableau-conteneur">
+        <table id="tablePLU">
+            <thead>
+                <tr>
+                    <th onclick="sortTable(0)">Code PLU</th>
+                    <th onclick="sortTable(1)">Produit</th>
+                    <th>Image</th>
+                </tr>
+            </thead>
+            <tbody id="corpsTableau">
+                <tr>
+                    <td>1</td>
+                    <td>Banane vrac</td>
+                    <td><img src="images/banane.jpg" alt="Banane vrac"></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Tomate grappe</td>
+                    <td><img src="images/tomate_grappe.jpg" alt="Tomate grappe"></td>
+                </tr>
+                <tr>
+                    <td>50</td>
+                    <td>Pain au chocolat pur beurre</td>
+                    <td><img src="images/pain_chocolat.jpg" alt="Pain au chocolat"></td>
+                </tr>
+                </tbody>
+        </table>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
