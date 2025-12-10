@@ -24,7 +24,93 @@ h1 {
     font-size: 2.2em;
     font-weight: 700;
 }
+/* Styles pour le panneau de contrôle et les résultats */
+#control-panel, #results-area {
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    background-color: #f8f9fa; /* Fond légèrement grisé */
+}
 
+/* Style du chronomètre */
+#timerDisplay {
+    font-size: 2.5em;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 15px;
+    color: #343a40;
+}
+
+/* Bouton PRÊT et Recommencer */
+#startButton {
+    padding: 12px 25px;
+    font-size: 1.2em;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    margin: 0 auto;
+    transition: background-color 0.3s;
+}
+
+#startButton:hover:not(:disabled) {
+    background-color: #0056b3;
+}
+
+#startButton:disabled {
+    background-color: #6c757d;
+}
+
+/* Bouton TERMINER */
+#submitButton {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    display: block;
+    width: 100%;
+    transition: background-color 0.3s;
+}
+
+#submitButton:hover {
+    background-color: #1e7e34;
+}
+
+/* Zone des questions (si vous voulez ajouter un style de séparation) */
+.question-group {
+    margin-bottom: 15px;
+    padding: 10px;
+    border-left: 5px solid #007bff;
+    background-color: #ffffff;
+    border-radius: 4px;
+}
+
+/* Style des résultats (Erreurs vs. Succès) */
+#detailsList {
+    padding-left: 0; /* Retire l'indentation de base de l'UL */
+}
+
+#detailsList li {
+    padding: 10px 0;
+    border-bottom: 1px dotted #ccc;
+    list-style: none;
+}
+
+.correct { 
+    color: #28a745; /* Vert */
+    font-weight: bold;
+}
+
+.incorrect { 
+    color: #dc3545; /* Rouge */
+    font-weight: bold;
+}
 /* ------------------------------------------- */
 /* 2. ÉLÉMENTS COMMUNS (Bouton et Recherche) */
 /* ------------------------------------------- */
@@ -335,3 +421,4 @@ h1 {
         right: 15px;
     }
 }
+
