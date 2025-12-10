@@ -1,4 +1,3 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="fr">
   <head>
@@ -8,7 +7,8 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
     />
-    <link rel="stylesheet" href="style.css" />
+    <!-- ?v=2 pour forcer le navigateur à recharger le nouveau CSS -->
+    <link rel="stylesheet" href="style.css?v=2" />
   </head>
   <body>
     <header class="site-header">
@@ -37,7 +37,7 @@
           <input
             id="searchInput"
             type="text"
-            placeholder="Ex : 4011 ou Banane"
+            placeholder="Ex : 1 ou Banane"
             autocomplete="off"
           />
         </div>
@@ -54,28 +54,4 @@
       <section class="card">
         <h2>Liste des produits</h2>
         <p class="section-description">
-          Visualise tous les produits avec leur image, leur nom et leur code PLU.
-        </p>
-
-        <div id="noResultsMessage" class="no-results" hidden>
-          Aucun produit ne correspond à ta recherche.
-        </div>
-
-        <div id="productsGrid" class="product-grid"></div>
-      </section>
-    </main>
-
-    <button id="scrollTopBtn" class="scroll-top-btn" aria-label="Retour en haut">
-      ↑
-    </button>
-
-    <footer class="site-footer">
-      <div class="container">
-        <p>PLUFormation • Site d’entraînement aux codes PLU • Gratuit et ouvert à tous</p>
-      </div>
-    </footer>
-
-    <script src="data.js" defer></script>
-    <script src="script.js" defer></script>
-  </body>
-</html>
+          Visualise tous les pr
