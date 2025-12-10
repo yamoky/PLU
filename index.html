@@ -1,29 +1,43 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Codes PLU LIDL - La Liste</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PLU — Produits & Quiz</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <header class="site-header">
+    <h1>PLU — Formation</h1>
+    <nav>
+      <a href="quiz.html" class="btn">Lancer un quiz</a>
+    </nav>
+  </header>
 
-    <h1>Fiches de Révision des Codes PLU LIDL</h1>
+  <main class="container">
+    <section class="controls">
+      <button id="toggle-list" class="btn">Afficher la liste des produits</button>
 
-    <input type="text" id="recherche" onkeyup="filtrerCartes()" placeholder="Rechercher un code PLU ou un produit...">
+      <div class="search-wrap" aria-hidden="true" id="search-wrap">
+        <label for="search-input">Rechercher (code ou nom) :</label>
+        <input id="search-input" type="search" placeholder="Tape un code, ex: 12345, ou un nom" />
+        <small id="search-count" aria-live="polite"></small>
+      </div>
+    </section>
 
-    <div id="boutons-liste-container">
-        <a href="quiz.html" class="bouton-quiz">Passer au Quiz !</a>
+    <section id="product-list-section" class="product-list-section hidden" aria-hidden="true">
+      <ul id="product-list" class="product-list"></ul>
+      <div id="no-results" class="no-results hidden">Aucun produit trouvé.</div>
+    </section>
+  </main>
 
-        <button id="masquer-bouton" class="bouton-quiz" onclick="toggleListe()">Masquer la liste</button>
-    </div>
+  <footer class="site-footer">
+    <small>&copy; PLU — yamoky</small>
+  </footer>
 
-    <div id="cartes-container">
-        </div>
-    
-    <button onclick="scrollToTop()" id="scrollToTopBtn" title="Remonter en haut">↑</button>
-
-    <script src="data.js"></script>
-    <script src="script.js"></script>
+  <!-- données communes -->
+  <script src="data.js"></script>
+  <!-- logique page -->
+  <script src="script.js"></script>
 </body>
 </html>
