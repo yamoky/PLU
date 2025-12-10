@@ -6,10 +6,10 @@ const TEMPS_LIMITE_PAR_QUESTION = 15; // 15 secondes par question
 let questionsPosees = 0;
 let score = 0;
 let questionActuelle = null;
-let timer; // Variable pour stocker le minuteur
-let tempsRestant; // Variable pour le temps restant
+let timer; 
+let tempsRestant; 
 
-// --- Fonctions utilitaires (inchangées) ---
+// --- Fonctions utilitaires ---
 
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -19,14 +19,13 @@ function shuffleArray(array) {
     return array;
 }
 
-// --- Nouvelles fonctions Chrono ---
+// --- Fonctions Chrono ---
 
 function demarrerChrono() {
     tempsRestant = TEMPS_LIMITE_PAR_QUESTION;
     const chronoAffichage = document.getElementById('chrono-affichage');
     chronoAffichage.textContent = `Temps : ${tempsRestant}s`;
 
-    // Nettoyer l'ancien timer s'il existe
     clearInterval(timer); 
 
     timer = setInterval(() => {
@@ -34,40 +33,36 @@ function demarrerChrono() {
         chronoAffichage.textContent = `Temps : ${tempsRestant}s`;
 
         if (tempsRestant <= 5) {
-            chronoAffichage.style.color = '#f44336'; // Rouge quand il reste peu de temps
+            chronoAffichage.style.color = '#f44336'; 
         } else {
             chronoAffichage.style.color = '#005A9C';
         }
 
         if (tempsRestant <= 0) {
             clearInterval(timer);
-            reponseAutomatique('Temps écoulé !'); // Passe à la question suivante
+            reponseAutomatique('Temps écoulé !'); 
         }
-    }, 1000); // Mise à jour toutes les secondes
+    }, 1000); 
 }
 
 function arreterChrono() {
     clearInterval(timer);
 }
 
-// --- Logique du Quiz (Adaptée) ---
+// --- Logique du Quiz (QCM) ---
 
 function genererQuestion() {
-    // 1. Choisir le produit correct aléatoirement
     const produitCorrect = PLU_DATA[Math.floor(Math.random() * PLU_DATA.length)];
     
-    // 2. Choisir 3 produits incorrects (distracteurs)
     let choixFaux = [];
     const produitsRestants = PLU_DATA.filter(p => p.code !== produitCorrect.code);
     
     shuffleArray(produitsRestants);
     choixFaux = produitsRestants.slice(0, 3);
     
-    // 3. Combiner et mélanger tous les choix
     const tousLesChoix = [produitCorrect, ...choixFaux];
     shuffleArray(tousLesChoix);
     
-    // 4. Déterminer si on pose la question sur le code ou sur le nom (50/50)
     const typeQuestion = Math.random() < 0.5 ? 'code' : 'nom'; 
 
     return {
@@ -101,12 +96,10 @@ function afficherQuestion(question) {
         reponseCible = question.produit.nom;
     }
 
-    // Affichage des choix
     const choixHTML = question.choix.map(choix => {
         let valeurAffichee = question.type === 'code' ? choix.code : choix.nom;
         let valeurReponse = question.type === 'code' ? choix.code : choix.nom;
 
-        // Appel de verifierReponse avec le bouton
         return `<button onclick="verifierReponse(this, '${valeurReponse}', '${reponseCible}')">${valeurAffichee}</button>`;
     }).join('');
 
@@ -119,17 +112,13 @@ function afficherQuestion(question) {
         </div>
     `;
     
-    demarrerChrono(); // Démarrer le chrono à l'affichage de la question
+    demarrerChrono(); 
 }
 
-
-// Réponse automatique si le temps est écoulé
 function reponseAutomatique(message) {
-    // Désactiver les boutons
     const boutons = document.querySelectorAll('.choix button');
     boutons.forEach(btn => btn.disabled = true);
     
-    // Afficher la correction (sans incrémenter le score, car hors-délai)
     const reponseCorrecte = questionActuelle.type === 'code' ? questionActuelle.produit.code : questionActuelle.produit.nom;
 
     boutons.forEach(btn => {
@@ -143,34 +132,26 @@ function reponseAutomatique(message) {
     quizArea.querySelector('img').alt = questionActuelle.produit.nom;
     quizArea.querySelector('img').style.opacity = '1';
 
-    // Mettre à jour l'affichage du chrono
     document.getElementById('chrono-affichage').textContent = message;
 
-    // Passer à la question suivante
     afficherBoutonSuivant();
 }
 
 
-// Gestionnaire de réponse (appelé par l'utilisateur)
 function verifierReponse(boutonClique, reponseUtilisateur, reponseCorrecte) {
-    arreterChrono(); // Arrêter le minuteur immédiatement après la réponse
+    arreterChrono(); 
     
-    // Désactiver tous les boutons après le clic
     const boutons = document.querySelectorAll('.choix button');
     boutons.forEach(btn => btn.disabled = true);
     
     const quizArea = document.getElementById('quiz-area');
-    let correct = false;
     
-    // 1. Vérification
     if (String(reponseUtilisateur).trim().toLowerCase() === String(reponseCorrecte).trim().toLowerCase()) {
         score++;
-        correct = true;
         boutonClique.classList.add('reponse-correcte');
     } else {
         boutonClique.classList.add('reponse-incorrecte');
         
-        // Surligner la bonne réponse
         boutons.forEach(btn => {
             if (String(btn.textContent).trim().toLowerCase() === String(reponseCorrecte).trim().toLowerCase()) {
                  btn.classList.add('reponse-correcte');
@@ -178,13 +159,10 @@ function verifierReponse(boutonClique, reponseUtilisateur, reponseCorrecte) {
         });
     }
 
-    // Afficher l'image dans tous les cas pour la correction
     quizArea.querySelector('img').src = `assets/${questionActuelle.produit.image}`;
     quizArea.querySelector('img').alt = questionActuelle.produit.nom;
     quizArea.querySelector('img').style.opacity = '1';
 
-
-    // 2. Mettre à jour le score et passer à la suite
     document.getElementById('score').textContent = `Score : ${score} / ${questionsPosees + 1}`;
     
     afficherBoutonSuivant();
@@ -195,7 +173,6 @@ function afficherBoutonSuivant() {
     if (questionsPosees < NBRE_QUESTIONS_TOTAL) {
         document.getElementById('bouton-suivant').style.display = 'block';
     } else {
-        // Fin du quiz
         document.getElementById('bouton-suivant').style.display = 'none';
         document.getElementById('message-fin').innerHTML = `
             <div class="resultats">
@@ -209,9 +186,7 @@ function afficherBoutonSuivant() {
 }
 
 
-// Fonction de chargement de question
 function chargerNouvelleQuestion() {
-    // Remettre la couleur du chrono à la normale
     document.getElementById('chrono-affichage').style.color = '#005A9C'; 
     
     if (questionsPosees < NBRE_QUESTIONS_TOTAL) {
@@ -221,7 +196,6 @@ function chargerNouvelleQuestion() {
     }
 }
 
-// Fonction de réinitialisation
 function reinitialiserQuiz() {
     arreterChrono();
     questionsPosees = 0;
@@ -231,11 +205,7 @@ function reinitialiserQuiz() {
     chargerNouvelleQuestion();
 }
 
-// ... (reste du code quiz.js) ...
-
-// Lancer la première question au chargement de la page
 document.addEventListener('DOMContentLoaded', function() {
-    // Vérifier que la liste PLU_DATA existe et n'est pas vide
     if (typeof PLU_DATA !== 'undefined' && PLU_DATA.length > 4) {
         chargerNouvelleQuestion();
     } else {
