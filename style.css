@@ -28,35 +28,6 @@ h1 {
 /* ------------------------------------------- */
 /* 2. ÉLÉMENTS COMMUNS (Bouton et Recherche) */
 /* ------------------------------------------- */
-/* Conteneur pour aligner les deux boutons (Quiz et Masquer) */
-#boutons-liste-container {
-    display: flex;
-    justify-content: space-between; /* Pour séparer les boutons aux extrémités */
-    align-items: center;
-    margin-bottom: 25px; /* Espace avant la liste */
-}
-
-/* Style spécifique pour le bouton secondaire (Masquer) */
-#masquer-bouton {
-    background-color: #ddd !important; /* Gris clair */
-    color: #333 !important;
-}
-
-#masquer-bouton:hover {
-    background-color: #ccc !important;
-}
-
-/* Adaptation mobile pour les boutons */
-@media screen and (max-width: 600px) {
-    #boutons-liste-container {
-        flex-direction: column; /* Les boutons passent sur deux lignes */
-        gap: 15px; /* Espace entre les boutons */
-    }
-    #boutons-liste-container > * {
-        width: 100%; /* Ils prennent toute la largeur */
-        text-align: center;
-    }
-}
 
 /* Barre de recherche */
 #recherche {
@@ -101,6 +72,25 @@ h1 {
 }
 .bouton-quiz[style*="background-color: #ccc"]:hover {
     background-color: #aaa !important;
+}
+
+/* Conteneur pour aligner et centrer les deux boutons (Quiz et Masquer) */
+#boutons-liste-container {
+    display: flex;
+    justify-content: center; /* CENTRAGE DES BOUTONS */
+    gap: 20px; /* Espacement entre les boutons */
+    align-items: center;
+    margin-bottom: 25px; 
+}
+
+/* Style spécifique pour le bouton secondaire (Masquer) */
+#masquer-bouton {
+    background-color: #ddd !important; /* Gris clair */
+    color: #333 !important;
+}
+
+#masquer-bouton:hover {
+    background-color: #ccc !important;
 }
 
 
@@ -298,16 +288,50 @@ h1 {
     h1 {
         font-size: 1.8em;
     }
+    
+    /* Adaptation mobile pour les boutons du haut */
+    #boutons-liste-container {
+        flex-direction: column; 
+        gap: 15px; 
+    }
+    #boutons-liste-container > * {
+        width: 100%; 
+        text-align: center;
+    }
 }
 
-/* Styles responsive généraux pour le quiz (pour éviter les conflits) */
-@media screen and (max-width: 600px) {
-    .quiz-container {
-        padding: 15px;
-    }
-    .choix button {
-        padding: 12px 8px;
-        font-size: 0.9em;
-    }
+/* ------------------------------------------- */
+/* 6. BOUTON RETOUR EN HAUT (Scroll-to-top) */
+/* ------------------------------------------- */
+
+#scrollToTopBtn {
+    display: none; /* Caché par défaut */
+    position: fixed; /* Reste à l'écran */
+    bottom: 20px; 
+    right: 20px;
+    z-index: 99; /* Par-dessus tous les éléments */
+    border: none;
+    outline: none;
+    background-color: #005A9C; /* Bleu LIDL */
+    color: white;
+    cursor: pointer;
+    padding: 15px 20px;
+    border-radius: 50%; /* Rond */
+    font-size: 1.5em;
+    line-height: 0; /* Centre le symbole flèche */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transition: background-color 0.3s;
 }
 
+#scrollToTopBtn:hover {
+    background-color: #004a80; /* Bleu plus foncé au survol */
+}
+
+/* Cache sur les très petits écrans si nécessaire */
+@media screen and (max-width: 400px) {
+    #scrollToTopBtn {
+        padding: 10px 15px;
+        bottom: 15px; 
+        right: 15px;
+    }
+}
