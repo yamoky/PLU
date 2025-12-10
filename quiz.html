@@ -1,4 +1,3 @@
-<!-- quiz.html -->
 <!DOCTYPE html>
 <html lang="fr">
   <head>
@@ -15,7 +14,9 @@
       <div class="container header-content">
         <div class="logo-area">
           <a href="index.html" class="logo-link">
-            <span class="logo">PLU<span class="logo-accent">Formation</span></span>
+            <span class="logo"
+              >PLU<span class="logo-accent">Formation</span></span
+            >
           </a>
           <p class="logo-subtitle">Quiz d’entraînement aux codes PLU</p>
         </div>
@@ -32,9 +33,8 @@
         <h1>Configurer ton quiz</h1>
         <p class="section-description">
           Choisis le <strong>nombre de questions</strong> et la
-          <strong>durée de la session</strong>. Le quiz s’arrête
-          soit quand le temps est écoulé, soit quand tu as répondu à toutes les
-          questions.
+          <strong>durée de la session</strong>. Le quiz s’arrête soit quand le
+          temps est écoulé, soit quand tu as répondu à toutes les questions.
         </p>
 
         <form id="quizConfigForm" class="quiz-config-form">
@@ -51,9 +51,7 @@
           </div>
 
           <div class="form-group">
-            <label for="quizDuration"
-              >Durée de la session (en minutes)</label
-            >
+            <label for="quizDuration">Durée de la session (en minutes)</label>
             <input
               id="quizDuration"
               type="number"
@@ -84,9 +82,18 @@
         </div>
 
         <div class="quiz-body">
-          <h2 id="questionText" class="quiz-question"></h2>
+          <div class="quiz-media">
+            <img
+              id="questionImage"
+              class="quiz-image"
+              alt="Illustration du produit"
+            />
+          </div>
 
-          <div id="answersContainer" class="answers-grid"></div>
+          <div>
+            <h2 id="questionText" class="quiz-question"></h2>
+            <div id="answersContainer" class="answers-grid"></div>
+          </div>
         </div>
       </section>
 
