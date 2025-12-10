@@ -8,25 +8,14 @@
 </head>
 <body>
 
-    <h1>Liste des Codes PLU LIDL</h1>
+    <h1>Fiches de Révision des Codes PLU LIDL</h1>
 
-    <input type="text" id="recherche" onkeyup="filtrerTableau()" placeholder="Rechercher un code PLU ou un produit...">
+    <input type="text" id="recherche" onkeyup="filtrerCartes()" placeholder="Rechercher un code PLU ou un produit...">
 
-    <div class="tableau-conteneur">
-        <table id="tablePLU">
-            <thead>
-                <tr>
-                    <th onclick="sortTable(0)">Code PLU</th>
-                    <th onclick="sortTable(1)">Produit</th>
-                    <th>Image</th>
-                </tr>
-            </thead>
-            <tbody id="corpsTableau">
-                </tbody>
-        </table>
-    </div>
+    <div id="cartes-container">
+        </div>
     
-    <p style="text-align: center;">
+    <p style="text-align: center; margin-top: 30px;">
         <a href="quiz.html" class="bouton-quiz">Passer au Quiz !</a>
     </p>
 
