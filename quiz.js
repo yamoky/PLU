@@ -30,7 +30,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const mistakesList = document.getElementById("mistakesList");
   const restartQuizBtn = document.getElementById("restartQuizBtn");
 
-  // État du quiz
   let questions = [];
   let currentQuestionIndex = 0;
   let timerSecondsRemaining = 0;
@@ -42,7 +41,6 @@ document.addEventListener("DOMContentLoaded", () => {
     answersLog: [],
   };
 
-  // --------- Utilitaires ----------
   function shuffleArray(arr) {
     const copy = arr.slice();
     for (let i = copy.length - 1; i > 0; i--) {
@@ -64,8 +62,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --------- Génération des questions ----------
   function generateQuestionFromProduct(product) {
-    // type 0 => "Quel est le code de Banane ?"
-    // type 1 => "Quel produit correspond au code 1 ?"
     const type = Math.random() < 0.5 ? 0 : 1;
 
     if (type === 0) {
@@ -83,7 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
         questionText: `Quel est le code PLU pour : « ${product.name} » ?`,
         correctAnswer,
         options,
-        product, // pour l'image
+        product,
       };
     } else {
       const correctAnswer = product.name;
@@ -100,7 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
         questionText: `Quel produit correspond au code PLU : ${product.code} ?`,
         correctAnswer,
         options,
-        product, // pour l'image
+        product,
       };
     }
   }
