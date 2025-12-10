@@ -146,7 +146,7 @@ function finishTest() {
 }
 
 // -------------------------------------------------------------------
-// 4. CALCUL ET AFFICHAGE DES RÉSULTATS
+// 4. CALCUL ET AFFICHAGE DES RÉSULTATS (Modifiée pour nettoyer les ** dans le texte de la question)
 // -------------------------------------------------------------------
 function calculateResults() {
     let correctCount = 0;
@@ -162,7 +162,11 @@ function calculateResults() {
         const isCorrect = (userAnswer === correctAnswer);
         
         const questionLabel = input.previousElementSibling;
-        const questionText = questionLabel ? questionLabel.textContent : `Question ${input.id}`;
+        let questionText = questionLabel ? questionLabel.textContent : `Question ${input.id}`;
+        
+        // --- NOUVEAU : Enlever toutes les doubles astérisques du texte de la question ---
+        // Ceci cible les cas où le texte de la question contient " Quel produit correspond au code PLU : **2** ?"
+        questionText = questionText.replace(/\*\*/g, ''); 
         
         li.classList.add(isCorrect ? 'correct' : 'incorrect');
 
@@ -196,3 +200,4 @@ function calculateResults() {
 // Si vous aviez d'autres fonctions globales, assurez-vous de les insérer ici.
 // Par exemple: 
 // function otherExistingFunction() { ... }
+
