@@ -32,16 +32,13 @@ function filtrerCartes() {
     input = document.getElementById("recherche");
     filter = input.value.toUpperCase();
     
-    // Sélectionne toutes les cartes
     cartes = document.getElementById("cartes-container").getElementsByClassName('carte-plu');
     
-    // On vérifie si la liste est masquée, pour gérer correctement l'affichage après recherche
-    const estMasquee = document.getElementById('cartes-container').style.display === 'none';
     const listeContainer = document.getElementById('cartes-container');
     const bouton = document.getElementById('masquer-bouton');
+    const estMasquee = listeContainer.style.display === 'none';
 
 
-    // Parcourt toutes les cartes
     for (i = 0; i < cartes.length; i++) {
         nomCarte = cartes[i].getAttribute('data-nom');
         codeCarte = cartes[i].getAttribute('data-plu');
@@ -88,7 +85,7 @@ function toggleListe() {
     
     if (listeContainer.style.display === 'none') {
         // AFFICHAGE :
-        listeContainer.style.display = 'grid'; // Remet en mode grille
+        listeContainer.style.display = 'grid'; 
         bouton.textContent = 'Masquer la liste';
         
         // Si le champ de recherche n'est pas vide, on réapplique le filtre
@@ -111,7 +108,32 @@ function toggleListe() {
 document.addEventListener('DOMContentLoaded', function() {
     if (typeof PLU_DATA !== 'undefined' && document.getElementById('cartes-container')) {
         construireCartes(PLU_DATA);
-        // Au démarrage, on s'assure que la recherche est vide et que tout est affiché
         document.getElementById("recherche").value = "";
     }
 });
+
+
+// --- LOGIQUE DU BOUTON RETOUR EN HAUT (Scroll-to-top) ---
+
+// Quand l'utilisateur fait défiler la page, on vérifie la position
+window.onscroll = function() {
+    scrollFunction();
+};
+
+function scrollFunction() {
+    const btn = document.getElementById("scrollToTopBtn");
+    // Afficher le bouton si la position verticale est supérieure à 500 pixels (après le header)
+    if (document.body.scrollTop > 500 || document.documentElement.scrollTop > 500) {
+        btn.style.display = "block";
+    } else {
+        btn.style.display = "none";
+    }
+}
+
+// Quand l'utilisateur clique sur le bouton, faire remonter la page en douceur
+function scrollToTop() {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+}
