@@ -1,337 +1,60 @@
-/* ------------------------------------------- */
-/* 1. RESET et BASE */
-/* ------------------------------------------- */
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
-
-* {
-    box-sizing: border-box; 
-    margin: 0;
-    padding: 0;
+:root{
+  --bg:#0f1724;
+  --card:#0b1220;
+  --text:#e6eef8;
+  --accent:#3b82f6;
+  --muted:#99a3b8;
+  --success:#16a34a;
+  --danger:#dc2626;
 }
 
-body {
-    font-family: 'Roboto', sans-serif;
-    padding: 10px;
-    background-color: #eef2f6; /* Fond très clair et doux */
-    color: #333;
-    line-height: 1.6;
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background:linear-gradient(180deg,#071029 0%, #081427 100%);
+  color:var(--text);
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  gap:1rem;
 }
 
-h1 {
-    color: #005A9C; /* Bleu LIDL */
-    text-align: center;
-    margin: 20px 0 30px;
-    font-size: 2.2em;
-    font-weight: 700;
+.container{max-width:980px;margin:1.5rem auto;padding:0 1rem;}
+
+.site-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1rem; background:rgba(255,255,255,0.02);
+  border-bottom:1px solid rgba(255,255,255,0.03);
+}
+.site-header h1{margin:0;font-size:1.15rem}
+.btn{
+  background:var(--accent);
+  color:white;
+  padding:8px 12px;border-radius:8px;border:0;cursor:pointer;
+  text-decoration:none;font-weight:600;
+}
+.btn.secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--text)}
+
+.controls{display:flex;gap:1rem;align-items:center;flex-wrap:wrap;margin-bottom:1rem}
+.search-wrap{display:flex;flex-direction:column;gap:6px}
+.search-wrap input{
+  padding:8px 10px;border-radius:8px;border:1px solid rgba(255,255,255,0.05);background:rgba(255,255,255,0.02);color:var(--text);
+  min-width:260px;
 }
 
-/* ------------------------------------------- */
-/* 2. ÉLÉMENTS COMMUNS (Bouton et Recherche) */
-/* ------------------------------------------- */
-
-/* Barre de recherche */
-#recherche {
-    width: 100%; 
-    padding: 14px;
-    margin-bottom: 25px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 1em;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-    transition: border-color 0.3s;
+.product-list-section{background:rgba(255,255,255,0.02);padding:1rem;border-radius:10px;border:1px solid rgba(255,255,255,0.03)}
+.product-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.product-item{
+  background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+  padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.02);
+  display:flex;flex-direction:column;gap:6px;
 }
+.product-item .code{font-weight:700;color:var(--accent)}
+.product-item .name{font-size:0.95rem;color:var(--text)}
+.product-item .meta{font-size:0.85rem;color:var(--muted)}
 
-#recherche:focus {
-    border-color: #005A9C;
-    outline: none;
-}
+.no-results{padding:10px;text-align:center;color:var(--muted)}
 
-/* Bouton Quiz/Retour */
-.bouton-quiz {
-    display: inline-block;
-    padding: 12px 25px;
-    background-color: #FFC72C; /* Jaune LIDL */
-    color: #333;
-    text-decoration: none;
-    font-weight: 700;
-    border-radius: 6px;
-    transition: background-color 0.3s, transform 0.1s;
-    border: none;
-    cursor: pointer;
-}
-
-.bouton-quiz:hover {
-    background-color: #ffb800; /* Jaune plus foncé au survol */
-    transform: translateY(-1px);
-}
-
-/* Bouton retour (gris) */
-.bouton-quiz[style*="background-color: #ccc"] {
-    background-color: #ccc !important;
-    color: #333;
-}
-.bouton-quiz[style*="background-color: #ccc"]:hover {
-    background-color: #aaa !important;
-}
-
-/* Conteneur pour aligner et centrer les deux boutons (Quiz et Masquer) */
-#boutons-liste-container {
-    display: flex;
-    justify-content: center; /* CENTRAGE DES BOUTONS */
-    gap: 20px; /* Espacement entre les boutons */
-    align-items: center;
-    margin-bottom: 25px; 
-}
-
-/* Style spécifique pour le bouton secondaire (Masquer) */
-#masquer-bouton {
-    background-color: #ddd !important; /* Gris clair */
-    color: #333 !important;
-}
-
-#masquer-bouton:hover {
-    background-color: #ccc !important;
-}
-
-
-/* ------------------------------------------- */
-/* 3. PAGE LISTE (index.html - Cartes) */
-/* ------------------------------------------- */
-
-#cartes-container {
-    display: grid;
-    /* BASE (Desktop par défaut) : 5 colonnes min. */
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
-    margin-bottom: 30px;
-    padding: 10px;
-}
-
-.carte-plu {
-    background-color: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    padding: 0;
-    text-align: center;
-    overflow: hidden;
-    transition: transform 0.2s, box-shadow 0.2s;
-    border: 1px solid #eee;
-}
-
-.carte-plu:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-}
-
-.carte-plu .plu-code {
-    font-size: 2.5em;
-    font-weight: 700;
-    color: #005A9C; /* Bleu LIDL */
-    padding: 10px 0 5px;
-}
-
-.carte-plu .plu-image {
-    width: 100%;
-    height: 180px; /* Taille uniforme pour toutes les images */
-    overflow: hidden;
-    background-color: #f7f7f7;
-}
-
-.carte-plu .plu-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Assure que l'image couvre l'espace sans déformation majeure */
-    display: block;
-    transition: opacity 0.3s;
-}
-
-.carte-plu .plu-nom {
-    font-size: 1.1em;
-    font-weight: 500;
-    color: #333;
-    padding: 10px 10px 15px;
-    background-color: #fcfcfc;
-}
-
-
-/* ------------------------------------------- */
-/* 4. PAGE QUIZ (quiz.html) */
-/* ------------------------------------------- */
-
-.quiz-container {
-    max-width: 650px;
-    margin: 20px auto;
-    padding: 30px;
-    background-color: white;
-    border-radius: 12px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.15);
-}
-
-.question-card {
-    padding: 25px;
-    margin-bottom: 30px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    text-align: center;
-    background-color: #fff;
-}
-
-.question-card h2 {
-    margin-bottom: 20px;
-    font-size: 1.4em;
-    color: #005A9C;
-}
-
-.question-card img {
-    max-width: 100%;
-    height: 220px;
-    object-fit: contain;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    border: 1px solid #eee;
-    transition: opacity 0.5s;
-}
-
-/* Boutons de Choix */
-.choix button {
-    display: block;
-    width: 100%;
-    padding: 15px;
-    margin-bottom: 12px;
-    border: 2px solid #005A9C;
-    background-color: #fff;
-    color: #005A9C;
-    font-size: 1.1em;
-    font-weight: 700;
-    cursor: pointer;
-    border-radius: 8px;
-    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-.choix button:hover:enabled {
-    background-color: #005A9C;
-    color: white;
-}
-
-/* Chrono */
-#chrono-affichage {
-    text-align: right; 
-    font-weight: 700; 
-    font-size: 1.4em; 
-    margin-bottom: 15px;
-    transition: color 0.3s;
-}
-
-/* Feedback */
-.reponse-correcte { 
-    background-color: #4CAF50 !important; /* Vert */
-    border-color: #4CAF50 !important;
-    color: white !important; 
-    box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
-}
-.reponse-incorrecte { 
-    background-color: #f44336 !important; /* Rouge */
-    border-color: #f44336 !important;
-    color: white !important; 
-}
-
-.resultats {
-    text-align: center;
-    padding: 30px;
-    border: 3px solid #FFC72C; /* Cadre Jaune */
-    background-color: #fffbe6; /* Fond jaune clair */
-    border-radius: 10px;
-}
-
-
-/* ------------------------------------------- */
-/* 5. ADAPTATION RESPONSIVE (Grille Cartes et Mobile) */
-/* ------------------------------------------- */
-
-/* 5 colonnes pour les très grands écrans (plus de 1200px) */
-@media screen and (min-width: 1200px) {
-    #cartes-container {
-        grid-template-columns: repeat(5, 1fr);
-    }
-}
-
-/* 4 colonnes pour les écrans Desktop standard/grands (entre 900px et 1200px) */
-@media screen and (min-width: 900px) and (max-width: 1199px) {
-    #cartes-container {
-        grid-template-columns: repeat(4, 1fr);
-    }
-}
-
-/* 3 colonnes pour les tablettes en mode paysage (entre 600px et 899px) */
-@media screen and (min-width: 600px) and (max-width: 899px) {
-    #cartes-container {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-/* 2 colonnes pour les mobiles en mode paysage et petites tablettes (entre 450px et 599px) */
-@media screen and (min-width: 450px) and (max-width: 599px) {
-    #cartes-container {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-/* 1 colonne pour les smartphones (moins de 450px) */
-@media screen and (max-width: 449px) {
-    #cartes-container {
-        grid-template-columns: 1fr;
-        padding: 0;
-    }
-    .carte-plu .plu-image {
-        height: 140px; 
-    }
-    h1 {
-        font-size: 1.8em;
-    }
-    
-    /* Adaptation mobile pour les boutons du haut */
-    #boutons-liste-container {
-        flex-direction: column; 
-        gap: 15px; 
-    }
-    #boutons-liste-container > * {
-        width: 100%; 
-        text-align: center;
-    }
-}
-
-/* ------------------------------------------- */
-/* 6. BOUTON RETOUR EN HAUT (Scroll-to-top) */
-/* ------------------------------------------- */
-
-#scrollToTopBtn {
-    display: none; /* Caché par défaut */
-    position: fixed; /* Reste à l'écran */
-    bottom: 20px; 
-    right: 20px;
-    z-index: 99; /* Par-dessus tous les éléments */
-    border: none;
-    outline: none;
-    background-color: #005A9C; /* Bleu LIDL */
-    color: white;
-    cursor: pointer;
-    padding: 15px 20px;
-    border-radius: 50%; /* Rond */
-    font-size: 1.5em;
-    line-height: 0; /* Centre le symbole flèche */
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    transition: background-color 0.3s;
-}
-
-#scrollToTopBtn:hover {
-    background-color: #004a80; /* Bleu plus foncé au survol */
-}
-
-/* Cache sur les très petits écrans si nécessaire */
-@media screen and (max-width: 400px) {
-    #scrollToTopBtn {
-        padding: 10px 15px;
-        bottom: 15px; 
-        right: 15px;
-    }
-}
+.hidden{display:none}
+.site-footer{padding:1rem;text-align:center;color:var(--muted)}
