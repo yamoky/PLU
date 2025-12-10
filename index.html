@@ -3,27 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Codes PLU LIDL - La Liste</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Test PLU Chronométré</title>
+    
+    <style>
+        /* Styles de base pour la lisibilité */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+        }
+        #control-panel, #results-area {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        #timerDisplay {
+            font-size: 2.5em;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        #startButton {
+            padding: 10px 20px;
+            font-size: 1.2em;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto 15px;
+        }
+        #startButton:disabled {
+            background-color: #6c757d;
+        }
+        .question-group {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        #results-area li {
+            padding: 5px 0;
+            border-bottom: 1px dotted #eee;
+        }
+        .correct { color: green; font-weight: bold; }
+        .incorrect { color: red; font-weight: bold; }
+    </style>
 </head>
 <body>
 
-    <h1>Fiches de Révision des Codes PLU LIDL</h1>
+    <h1>Test de Codes PLU</h1>
 
-    <input type="text" id="recherche" onkeyup="filtrerCartes()" placeholder="Rechercher un code PLU ou un produit...">
-
-    <div id="boutons-liste-container">
-        <a href="quiz.html" class="bouton-quiz">Passer au Quiz !</a>
-
-        <button id="masquer-bouton" class="bouton-quiz" onclick="toggleListe()">Masquer la liste</button>
+    <div id="control-panel">
+        <div id="timerDisplay">1:30</div>
+        <button id="startButton" onclick="startTest()">PRÊT</button>
     </div>
 
-    <div id="cartes-container">
+    <div id="test-questions" style="display: none;">
+        <h2>Entrez les codes PLU (Exemple)</h2>
+        
+        <div class="question-group" data-id="q1">
+            <label for="input-q1">1. Quel est le code PLU pour la **Pomme** ?</label>
+            <input type="text" id="input-q1" data-correct-answer="4015" placeholder="Entrez le code..." disabled>
         </div>
-    
-    <button onclick="scrollToTop()" id="scrollToTopBtn" title="Remonter en haut">↑</button>
 
-    <script src="data.js"></script>
-    <script src="script.js"></script>
-</body>
-</html>
+        <div class="question-group" data-id="q2">
+            <label for="input-q2">2. Quel est le code PLU pour la **Banane** ?</label>
+            <input type="text" id="input-q2" data-correct-answer="4011" placeholder="Entrez le code..." disabled>
+        </div>
+
+        <div class="question-group" data-id="q3">
+            <label for="input-q3">3. Quel est
