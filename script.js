@@ -29,7 +29,7 @@ function genererCartes() {
         carte.setAttribute('data-nom', item.nom.toLowerCase());
         carte.setAttribute('data-code', item.code);
 
-        // Assurez-vous que le chemin 'assets/' est correct pour vos images
+        // Cette balise IMG va chercher les images dans le dossier 'assets/'
         carte.innerHTML = `
             <div class="plu-image">
                 <img src="assets/${item.image}" alt="${item.nom}" loading="lazy" onerror="this.src='https://via.placeholder.com/200?text=Image+Manquante'">
@@ -70,9 +70,7 @@ function toggleListe() {
 
     if (!container) return;
 
-    // Affiche/masque basé sur l'état actuel de display
     if (container.style.display === 'none') {
-        // AFFICHER
         container.style.display = 'grid'; 
         if(barreRecherche) barreRecherche.style.display = 'block';
         if(bouton) {
@@ -80,7 +78,6 @@ function toggleListe() {
             bouton.style.backgroundColor = '#ddd'; 
         }
     } else {
-        // MASQUER
         container.style.display = 'none';
         if(barreRecherche) barreRecherche.style.display = 'none';
         if(bouton) {
