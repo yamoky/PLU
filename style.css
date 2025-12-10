@@ -28,6 +28,35 @@ h1 {
 /* ------------------------------------------- */
 /* 2. ÉLÉMENTS COMMUNS (Bouton et Recherche) */
 /* ------------------------------------------- */
+/* Conteneur pour aligner les deux boutons (Quiz et Masquer) */
+#boutons-liste-container {
+    display: flex;
+    justify-content: space-between; /* Pour séparer les boutons aux extrémités */
+    align-items: center;
+    margin-bottom: 25px; /* Espace avant la liste */
+}
+
+/* Style spécifique pour le bouton secondaire (Masquer) */
+#masquer-bouton {
+    background-color: #ddd !important; /* Gris clair */
+    color: #333 !important;
+}
+
+#masquer-bouton:hover {
+    background-color: #ccc !important;
+}
+
+/* Adaptation mobile pour les boutons */
+@media screen and (max-width: 600px) {
+    #boutons-liste-container {
+        flex-direction: column; /* Les boutons passent sur deux lignes */
+        gap: 15px; /* Espace entre les boutons */
+    }
+    #boutons-liste-container > * {
+        width: 100%; /* Ils prennent toute la largeur */
+        text-align: center;
+    }
+}
 
 /* Barre de recherche */
 #recherche {
@@ -281,3 +310,4 @@ h1 {
         font-size: 0.9em;
     }
 }
+
