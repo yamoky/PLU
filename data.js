@@ -188,8 +188,5 @@ window.PLU_DATA = (function () {
     },
   ];
 
-  // On renvoie un objet avec la liste des produits
-  return {
-    products,
-  };
+  return { products };
 })();
