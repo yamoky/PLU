@@ -1,28 +1,54 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Codes PLU LIDL</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PLU — Quiz</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <header class="site-header">
+    <h1>Quiz PLU</h1>
+    <nav>
+      <a href="index.html" class="btn secondary">Retour</a>
+    </nav>
+  </header>
 
-    <header>
-        <p style="text-align: center;"><a href="index.html" class="bouton-quiz" style="background-color: #ccc;">Retour à la Liste</a></p>
-        <h1>Mode Quiz PLU</h1>
-    </header>
+  <main class="container">
+    <section class="quiz-controls">
+      <label for="num-questions">Nombre de questions :</label>
+      <select id="num-questions">
+        <option value="5">5</option>
+        <option value="10" selected>10</option>
+        <option value="20">20</option>
+      </select>
 
-    <div class="quiz-container">
-        <p id="score">Score : 0 / 0</p>
-        <div id="chrono-affichage" style="text-align: right; font-weight: bold; font-size: 1.4em; color: #005A9C;">Temps : 15s</div>
-        <div id="quiz-area">
-            </div>
-        <button id="bouton-suivant" onclick="chargerNouvelleQuestion()" style="display: none; width: 100%; margin-top: 15px;" class="bouton-quiz">Question Suivante</button>
-        <p id="message-fin" style="text-align: center; font-weight: bold; display: none;"></p>
-    </div>
+      <label for="time-per-session">Temps session (secondes) :</label>
+      <input id="time-per-session" type="number" min="10" max="3600" value="90" step="5" />
+      <button id="start-quiz" class="btn">Démarrer</button>
+    </section>
 
-    <script src="data.js"></script>
-    <script src="quiz.js"></script>
+    <section id="quiz-area" class="product-list-section hidden" aria-hidden="true">
+      <div id="timer" class="timer">Temps restant: <span id="timer-value">00:00</span></div>
+      <div id="question-area"></div>
+      <div id="quiz-controls" style="margin-top:10px;">
+        <button id="next-btn" class="btn">Suivant</button>
+      </div>
+    </section>
+
+    <section id="result-area" class="product-list-section hidden" aria-hidden="true">
+      <h2>Résultats</h2>
+      <div id="result-summary"></div>
+      <div id="mistakes" style="margin-top:1rem"></div>
+      <button id="restart" class="btn">Recommencer</button>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <small>&copy; PLU — yamoky</small>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="quiz.js"></script>
 </body>
 </html>
