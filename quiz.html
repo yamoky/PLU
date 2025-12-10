@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Codes PLU LIDL</title>
+    <link rel="stylesheet" href="style.css">
+    </head>
+<body>
+
+    <header>
+        <p style="text-align: center;"><a href="index.html" class="bouton-quiz" style="background-color: #ccc;">Retour à la Liste</a></p>
+        <h1>Mode Quiz PLU</h1>
+    </header>
+
+    <div class="quiz-container">
+        <p id="score">Score : 0 / 0</p>
+        <div id="quiz-area">
+            </div>
+        <button id="bouton-suivant" onclick="chargerNouvelleQuestion()" style="display: none; width: 100%; margin-top: 15px;">Question Suivante</button>
+        <p id="message-fin" style="text-align: center; font-weight: bold; display: none;"></p>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="quiz.js"></script>
+</body>
+</html>
