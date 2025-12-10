@@ -1,7 +1,5 @@
 // quiz.js
 
-// Les données PLU_DATA sont chargées depuis data.js
-
 const NBRE_QUESTIONS_TOTAL = 10; // Définir le nombre de questions par session
 let questionsPosees = 0;
 let score = 0;
