@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const questionTextEl = document.getElementById("questionText");
   const answersContainer = document.getElementById("answersContainer");
+  const questionImageEl = document.getElementById("questionImage");
 
   const resultsQuestionsCount = document.getElementById(
     "resultsQuestionsCount"
@@ -64,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // --------- Génération des questions ----------
   function generateQuestionFromProduct(product) {
     // type 0 => "Quel est le code de Banane ?"
-    // type 1 => "Quel produit correspond au code 4011 ?"
+    // type 1 => "Quel produit correspond au code 1 ?"
     const type = Math.random() < 0.5 ? 0 : 1;
 
     if (type === 0) {
@@ -83,6 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
         questionText: `Quel est le code PLU pour : « ${product.name} » ?`,
         correctAnswer,
         options,
+        product, // on garde le produit pour l'image
       };
     } else {
       // Produit pour un code donné
@@ -100,6 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
         questionText: `Quel produit correspond au code PLU : ${product.code} ?`,
         correctAnswer,
         options,
+        product, // on garde le produit pour l'image
       };
     }
   }
@@ -154,6 +157,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     questionTextEl.textContent = question.questionText;
     answersContainer.innerHTML = "";
+
+    // Gestion de l'image du produit
+    if (question.product && question.product.image && questionImageEl) {
+      questionImageEl.src = question.product.image;
+      questionImageEl.alt = question.product.name || "Produit du quiz";
+      questionImageEl.style.visibility = "visible";
+
+      // fallback si l'image ne charge pas
+      questionImageEl.onerror = () => {
+        questionImageEl.style.visibility = "hidden";
+      };
+    } else if (questionImageEl) {
+      questionImageEl.style.visibility = "hidden";
+    }
 
     question.options.forEach((option) => {
       const btn = document.createElement("button");
@@ -317,6 +334,7 @@ document.addEventListener("DOMContentLoaded", () => {
     quizPanel.hidden = false;
     resultsPanel.hidden = false; // on l'affiche mais il est vide tant qu'on a pas terminé
     resultsPanel.hidden = true; // donc on le re-cache ici
+
     displayQuestion();
     startTimer(totalSeconds);
 
