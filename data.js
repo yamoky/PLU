@@ -1,61 +1,36 @@
 // data.js
 const PLU_DATA = [
-    // --- Fruits & Légumes (codes bas) ---
-    { code: 1, nom: "Banane vrac", image: "banane.jpg" },
-    { code: 2, nom: "Tomate grappe", image: "tomate_grappe.jpg" },
+    // --- Fruits & Légumes (codes 1 à 20) ---
+    { code: 1, nom: "Banane", image: "banane.jpg" },
+    { code: 2, nom: "Tomate", image: "tomate_grappe.jpg" },
     { code: 3, nom: "Concombre", image: "concombre.jpg" },
-    { code: 4, nom: "Courgette Vrac", image: "courgette_vrac.jpg" },
-    { code: 5, nom: "Aubergine Vrac", image: "aubergine_vrac.jpg" },
-    { code: 6, nom: "Radis vrac", image: "radis_vrac.jpg" },
-    { code: 7, nom: "Chou-fleur", image: "chou_fleur.jpg" },
-    { code: 8, nom: "Poireaux vrac", image: "poireaux_vrac.jpg" },
-    { code: 9, nom: "Salade iceberg", image: "salade_iceberg.jpg" },
-    { code: 10, nom: "Oignons jaunes vrac", image: "oignons_jaunes_vrac.jpg" },
-    { code: 11, nom: "Echalote vrac", image: "echalote_vrac.jpg" },
-    { code: 12, nom: "Champignon de paris", image: "champignon_paris.jpg" },
-    { code: 13, nom: "Ail Vrac", image: "ail_vrac.jpg" },
-    { code: 14, nom: "Pomme golden", image: "pomme_golden.jpg" },
-    { code: 15, nom: "Pomme granny", image: "pomme_granny.jpg" },
-    { code: 16, nom: "Pomme gala", image: "pomme_gala.jpg" },
-    { code: 17, nom: "Kiwi vrac", image: "kiwi_vrac.jpg" },
-    { code: 18, nom: "Poire vrac", image: "poire_vrac.jpg" },
-    { code: 19, nom: "Citron vrac", image: "citron_vrac.jpg" },
-    { code: 20, nom: "Orange vrac", image: "orange_vrac.jpg" },
-    { code: 21, nom: "Clémentine vrac", image: "clementine_vrac.jpg" },
-    { code: 22, nom: "Pamplemousse vrac", image: "pamplemousse_vrac.jpg" },
-    { code: 23, nom: "Avocat Vrac", image: "avocat_vrac.jpg" },
-    { code: 24, nom: "Mangue Vrac", image: "mangue_vrac.jpg" },
-    { code: 25, nom: "Patate douce vrac", image: "patate_douce_vrac.jpg" },
-    { code: 26, nom: "Poivron rouge vrac", image: "poivron_rouge_vrac.jpg" },
-    { code: 27, nom: "Poivron vert vrac", image: "poivron_vert_vrac.jpg" },
-    { code: 28, nom: "Carotte vrac", image: "carotte_vrac.jpg" },
-    { code: 29, nom: "Céleri-rave vrac", image: "celeri_rave_vrac.jpg" },
-    { code: 30, nom: "Chou blanc vrac", image: "chou_blanc_vrac.jpg" },
-    { code: 31, nom: "Chou rouge vrac", image: "chou_rouge_vrac.jpg" },
-    { code: 32, nom: "Brocoli", image: "brocoli.jpg" },
-    { code: 33, nom: "Fenouil vrac", image: "fenouil_vrac.jpg" },
-    { code: 34, nom: "Betterave rouge vrac", image: "betterave_rouge_vrac.jpg" },
-    { code: 35, nom: "Gingembre vrac", image: "gingembre_vrac.jpg" },
-    { code: 36, nom: "Chou de Bruxelles vrac", image: "chou_de_bruxelles_vrac.jpg" },
-    { code: 37, nom: "Oignons rouges vrac", image: "oignons_rouges_vrac.jpg" },
+    { code: 4, nom: "Courgette", image: "courgette_vrac.jpg" },
+    { code: 5, nom: "Melon", image: "melon.jpg" }, // J'ai supposé le nom d'image
+    { code: 6, nom: "Avocat", image: "avocat_vrac.jpg" },
+    { code: 7, nom: "Batavia", image: "batavia.jpg" }, // J'ai supposé le nom d'image
+    { code: 8, nom: "Kiwi Vert", image: "kiwi_vrac.jpg" },
+    { code: 9, nom: "Radis Botte", image: "radis_vrac.jpg" },
+    { code: 10, nom: "Raisin Blanc", image: "raisin_blanc.jpg" }, // J'ai supposé le nom d'image
+    { code: 11, nom: "Aubergine", image: "aubergine_vrac.jpg" },
+    { code: 12, nom: "Chou-fleur", image: "chou_fleur.jpg" },
+    { code: 13, nom: "Poire Verte", image: "poire_vrac.jpg" },
+    { code: 14, nom: "Mangue", image: "mangue_vrac.jpg" },
+    { code: 15, nom: "Pomelo", image: "pamplemousse_vrac.jpg" }, // Utilisation de l'image Pamplemousse
+    { code: 16, nom: "Ananas", image: "ananas.jpg" }, // J'ai supposé le nom d'image
+    { code: 17, nom: "Nectarine", image: "nectarine.jpg" }, // J'ai supposé le nom d'image
+    { code: 18, nom: "Pomme Bicolore", image: "pomme_gala.jpg" }, // Utilisation de l'image Gala
+    { code: 19, nom: "Pomme Golden", image: "pomme_golden.jpg" },
+    { code: 20, nom: "Patate Douce", image: "patate_douce_vrac.jpg" },
     
     // --- Boulangerie (codes 50+) ---
-    { code: 50, nom: "Pain au chocolat pur beurre", image: "pain_chocolat_pur_beurre.jpg" },
-    { code: 51, nom: "Beignet chocolat noisette", image: "beignet_chocolat_noisette.jpg" },
+    { code: 50, nom: "Pain Chocolat", image: "pain_chocolat_pur_beurre.jpg" },
+    { code: 51, nom: "Beignet Chocolat", image: "beignet_chocolat_noisette.jpg" },
     { code: 52, nom: "Croissant", image: "croissant.jpg" },
-    { code: 53, nom: "Mini pain au chocolat pur beurre", image: "mini_pain_chocolat_pur_beurre.jpg" },
-    { code: 54, nom: "Mini croissant", image: "mini_croissant.jpg" },
-    { code: 55, nom: "Pain torsadé aux pépites de chocolat", image: "pain_torsade_pepites_chocolat.jpg" },
-    { code: 56, nom: "Pain aux graines", image: "pain_aux_graines.jpg" },
-    { code: 57, nom: "Pain seigle-sésame", image: "pain_seigle_sesame.jpg" },
-    { code: 58, nom: "Baguette viennoise", image: "baguette_viennoise.jpg" },
-    { code: 59, nom: "Pain de campagne", image: "pain_de_campagne.jpg" },
-    { code: 60, nom: "Pain multicéréales", image: "pain_multicereales.jpg" },
-    { code: 61, nom: "Petit pain complet", image: "petit_pain_complet.jpg" },
-    { code: 62, nom: "Pain rustique", image: "pain_rustique.jpg" },
-    { code: 63, nom: "Petit pain classique", image: "petit_pain_classique.jpg" },
-    { code: 64, nom: "Bretzel", image: "bretzel.jpg" },
-    { code: 65, nom: "Muffin chocolat", image: "muffin_chocolat.jpg" },
-    { code: 66, nom: "Muffin myrtille", image: "muffin_myrtille.jpg" },
-    { code: 67, nom: "Pain noir multicéréales", image: "pain_noir_multicereales.jpg" },
+    { code: 53, nom: "Ciabatta", image: "ciabatta.jpg" }, // J'ai supposé le nom d'image
+    { code: 54, nom: "Pain aux Noix", image: "pain_noix.jpg" }, // J'ai supposé le nom d'image
+    { code: 55, nom: "Pain Céréales", image: "pain_multicereales.jpg" }, // Utilisation de l'image Multicéréales
+    { code: 56, nom: "Pain Complet", image: "petit_pain_complet.jpg" }, // Utilisation de l'image Pain Complet
+    { code: 57, nom: "Suisse Chocolat", image: "suisse_chocolat.jpg" }, // J'ai supposé le nom d'image
+    { code: 58, nom: "Barchetta 4 Fromages", image: "barchetta_4_fromages.jpg" }, // J'ai supposé le nom d'image
+    { code: 59, nom: "Pain aux Raisins", image: "pain_aux_raisins.jpg" }, // J'ai supposé le nom d'image
 ];
