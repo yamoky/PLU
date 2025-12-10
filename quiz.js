@@ -1,4 +1,4 @@
-// quiz.js
+// quiz.js - Logique pour la page quiz (quiz.html)
 
 const NBRE_QUESTIONS_TOTAL = 10; 
 const TEMPS_LIMITE_PAR_QUESTION = 15; // 15 secondes par question
@@ -80,16 +80,17 @@ function afficherQuestion(question) {
     let enonceHTML = '';
     let reponseCible = '';
     
+    // MODIFICATION ICI : Suppression des **
     if (question.type === 'code') {
         enonceHTML = `
-            <h2>Quel est le code PLU pour : **${question.produit.nom.toUpperCase()}** ?</h2>
+            <h2>Quel est le code PLU pour : ${question.produit.nom.toUpperCase()} ?</h2>
             <img src="assets/${question.produit.image}" alt="${question.produit.nom}">
         `;
         reponseCible = question.produit.code;
         
     } else {
         enonceHTML = `
-            <h2>Quel produit correspond au code PLU : **${question.produit.code}** ?</h2>
+            <h2>Quel produit correspond au code PLU : ${question.produit.code} ?</h2>
             <img src="assets/${question.produit.image}" alt="${question.produit.nom}" style="opacity: 0.1;">
             <p style="font-style: italic; font-size: 0.9em;">(L'image sera révélée après la réponse)</p>
         `;
@@ -174,10 +175,11 @@ function afficherBoutonSuivant() {
         document.getElementById('bouton-suivant').style.display = 'block';
     } else {
         document.getElementById('bouton-suivant').style.display = 'none';
+        // MODIFICATION ICI : Suppression des ** dans le message de fin
         document.getElementById('message-fin').innerHTML = `
             <div class="resultats">
                 <h2>FIN DU QUIZ !</h2>
-                <p>Votre score final est de : **${score} / ${NBRE_QUESTIONS_TOTAL}**</p>
+                <p>Votre score final est de : ${score} / ${NBRE_QUESTIONS_TOTAL}</p>
                 <p style="margin-top: 15px;"><button onclick="reinitialiserQuiz()" class="bouton-quiz">Recommencer le Quiz</button></p>
             </div>
         `;
