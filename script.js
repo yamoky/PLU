@@ -1,203 +1,93 @@
-// =================================================================================
-// LOGIQUE EXISTANTE (FILTRAGE DE LA LISTE PLU)
-// =================================================================================
+// script.js - Logique pour la page d'accueil (index.html)
 
-const searchInput = document.getElementById('plu-search');
-const pluList = document.getElementById('plu-list');
+document.addEventListener('DOMContentLoaded', () => {
+    genererCartes();
+    
+    // Gestion du bouton Scroll To Top
+    window.onscroll = function() { scrollFunction() };
+});
 
-if (searchInput && pluList) {
-    searchInput.addEventListener('keyup', function() {
-        const searchText = searchInput.value.toLowerCase();
-        const items = pluList.getElementsByTagName('li');
-        
-        for (let i = 0; i < items.length; i++) {
-            const item = items[i];
-            const text = item.textContent || item.innerText;
-            
-            if (text.toLowerCase().indexOf(searchText) > -1) {
-                item.style.display = '';
-            } else {
-                item.style.display = 'none';
-            }
-        }
-    });
-}
-
-
-// =================================================================================
-// NOUVELLE LOGIQUE (TEST CHRONOMÉTRÉ)
-// =================================================================================
-
-// --- VARIABLES GLOBALES DE CONTRÔLE ---
-const TEST_DURATION_SECONDS = 90; // 1 minute et 30 secondes
-let timeLeft = TEST_DURATION_SECONDS;
-let timerInterval;
-let startTime; 
-
-// --- REFERENCES DOM NOUVELLES ET EXISTANTES ---
-const timerDisplay = document.getElementById('timerDisplay');
-const startButton = document.getElementById('startButton');
-const testQuestionsDiv = document.getElementById('test-questions');
-const submitButton = document.getElementById('submitButton');
-const resultsArea = document.getElementById('results-area');
-const retryButton = document.getElementById('retryButton');
-const consultationModeDiv = document.getElementById('consultation-mode'); 
-
-const questionInputs = document.querySelectorAll('#test-questions input[type="text"]'); 
-
-
-// -------------------------------------------------------------------
-// 1. DÉMARRAGE DU TEST (Décompte de 3s)
-// -------------------------------------------------------------------
-function startTest() {
-    // 1. Masquer le mode consultation/recherche
-    if (consultationModeDiv) {
-        consultationModeDiv.style.display = 'none';
+// 1. Générer les cartes depuis data.js
+function genererCartes() {
+    const container = document.getElementById('cartes-container');
+    
+    // Vérification de sécurité
+    if (!container) return; 
+    if (typeof PLU_DATA === 'undefined') {
+        container.innerHTML = "<p>Erreur : Données PLU manquantes (data.js).</p>";
+        return;
     }
 
-    // 2. Préparation de l'interface du test
-    startButton.disabled = true;
-    resultsArea.style.display = 'none';
-    testQuestionsDiv.style.display = 'block'; 
-    submitButton.style.display = 'none';
-    if (retryButton) retryButton.style.display = 'none';
-    
-    timerDisplay.classList.remove('timer-alert');
-    timerDisplay.classList.add('timer-ready');
-    
-    // 3. Initialisation des questions
-    questionInputs.forEach(input => {
-        input.value = ''; 
-        input.disabled = true; 
-    });
+    container.innerHTML = ''; // Nettoyer
 
-    // 4. Logique du Décompte (3, 2, 1...)
-    let countdown = 3;
-    timerDisplay.textContent = `Départ dans ${countdown}...`;
+    PLU_DATA.forEach(item => {
+        const carte = document.createElement('div');
+        carte.className = 'carte-plu';
+        // On ajoute le nom en data-attribute pour faciliter la recherche
+        carte.setAttribute('data-nom', item.nom.toLowerCase());
+        carte.setAttribute('data-code', item.code);
 
-    const countdownInterval = setInterval(() => {
-        countdown--;
-        if (countdown > 0) {
-            timerDisplay.textContent = `Départ dans ${countdown}...`;
-        } else {
-            clearInterval(countdownInterval);
-            timerDisplay.textContent = '1:30';
-            startButton.style.display = 'none';
-            submitButton.style.display = 'block';
-            questionInputs.forEach(input => input.disabled = false); // Active les inputs
-            startTime = Date.now(); 
-            startTimer(); 
-        }
-    }, 1000);
-}
-
-// -------------------------------------------------------------------
-// 2. LOGIQUE DU CHRONOMÈTRE (1m30s)
-// -------------------------------------------------------------------
-function startTimer() {
-    timerDisplay.classList.remove('timer-ready');
-    timeLeft = TEST_DURATION_SECONDS; 
-    
-    timerInterval = setInterval(() => {
-        timeLeft--;
-        
-        const minutes = Math.floor(timeLeft / 60);
-        const seconds = timeLeft % 60;
-        timerDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-
-        if (timeLeft <= 10) {
-            timerDisplay.classList.add('timer-alert'); 
-        }
-
-        if (timeLeft <= 0) {
-            clearInterval(timerInterval);
-            finishTest(); 
-        }
-    }, 1000);
-}
-
-// -------------------------------------------------------------------
-// 3. FIN DU TEST 
-// -------------------------------------------------------------------
-function finishTest() {
-    clearInterval(timerInterval);
-
-    // Calcul du temps réel utilisé
-    const timeElapsed = (TEST_DURATION_SECONDS - timeLeft);
-    const usedMinutes = Math.floor(timeElapsed / 60);
-    const usedSeconds = timeElapsed % 60;
-    
-    document.getElementById('timeUsed').textContent = 
-        `${usedMinutes}m ${usedSeconds < 10 ? '0' : ''}${usedSeconds}s`;
-
-    // Masquage du test
-    questionInputs.forEach(input => input.disabled = true);
-    submitButton.style.display = 'none';
-    testQuestionsDiv.style.display = 'none';
-    
-    calculateResults(); 
-    
-    // Affichage du bouton "Réessayer"
-    if (retryButton) retryButton.style.display = 'block';
-    
-    // Rétablit le startButton pour être prêt à relancer
-    startButton.disabled = false;
-    startButton.textContent = 'Recommencer'; 
-}
-
-// -------------------------------------------------------------------
-// 4. CALCUL ET AFFICHAGE DES RÉSULTATS (Modifiée pour nettoyer les ** dans le texte de la question)
-// -------------------------------------------------------------------
-function calculateResults() {
-    let correctCount = 0;
-    const totalQuestions = questionInputs.length;
-    const detailsList = document.getElementById('detailsList');
-    detailsList.innerHTML = ''; 
-
-    questionInputs.forEach(input => {
-        const li = document.createElement('li');
-        const correctAnswer = input.getAttribute('data-correct-answer');
-        const userAnswer = input.value.trim();
-        
-        const isCorrect = (userAnswer === correctAnswer);
-        
-        const questionLabel = input.previousElementSibling;
-        let questionText = questionLabel ? questionLabel.textContent : `Question ${input.id}`;
-        
-        // --- NOUVEAU : Enlever toutes les doubles astérisques du texte de la question ---
-        // Ceci cible les cas où le texte de la question contient " Quel produit correspond au code PLU : **2** ?"
-        questionText = questionText.replace(/\*\*/g, ''); 
-        
-        li.classList.add(isCorrect ? 'correct' : 'incorrect');
-
-        li.innerHTML = `
-            ${isCorrect ? '✅' : '❌'} 
-            <span class="question-text">${questionText}</span> : 
-            <br>Votre saisie : <strong>${userAnswer || '*(Non répondu)*'}</strong> 
-            ${isCorrect ? '' : ` (Attendu : <strong class="expected-answer">${correctAnswer}</strong>)`}
+        carte.innerHTML = `
+            <div class="plu-image">
+                <img src="assets/${item.image}" alt="${item.nom}" loading="lazy">
+            </div>
+            <div class="plu-nom">${item.nom}</div>
+            <div class="plu-code">${item.code}</div>
         `;
-
-        if (isCorrect) {
-            correctCount++;
-        }
-        
-        detailsList.appendChild(li);
+        container.appendChild(carte);
     });
-
-    // Mise à jour du score général
-    const percentage = (correctCount / totalQuestions) * 100;
-    
-    document.getElementById('scoreBrut').textContent = `${correctCount}/${totalQuestions}`;
-    document.getElementById('successPercentage').textContent = `${percentage.toFixed(0)}%`;
-    
-    resultsArea.style.display = 'block';
 }
 
-// -------------------------------------------------------------------
-// 5. FONCTIONS GLOBALES (Gardées pour compatibilité avec l'HTML)
-// -------------------------------------------------------------------
-// NOTE: L'ancienne fonction checkPlu n'est plus nécessaire car finishTest fait la vérification.
-// Si vous aviez d'autres fonctions globales, assurez-vous de les insérer ici.
-// Par exemple: 
-// function otherExistingFunction() { ... }
+// 2. Filtrer les cartes (Barre de recherche)
+function filtrerCartes() {
+    const input = document.getElementById('recherche');
+    const filter = input.value.toLowerCase();
+    const cartes = document.getElementsByClassName('carte-plu');
 
+    for (let i = 0; i < cartes.length; i++) {
+        const nom = cartes[i].getAttribute('data-nom');
+        const code = cartes[i].getAttribute('data-code');
+
+        // Vérifie si la recherche correspond au NOM ou au CODE
+        if (nom.includes(filter) || code.includes(filter)) {
+            cartes[i].style.display = "";
+        } else {
+            cartes[i].style.display = "none";
+        }
+    }
+}
+
+// 3. Masquer / Afficher la liste
+function toggleListe() {
+    const container = document.getElementById('cartes-container');
+    const bouton = document.getElementById('masquer-bouton');
+    const barreRecherche = document.getElementById('recherche');
+
+    if (container.style.display === 'none') {
+        container.style.display = 'grid'; // Ou 'flex' selon votre CSS, ici grid est mieux
+        barreRecherche.style.display = 'block';
+        bouton.textContent = 'Masquer la liste';
+        bouton.style.backgroundColor = '#ddd';
+    } else {
+        container.style.display = 'none';
+        barreRecherche.style.display = 'none';
+        bouton.textContent = 'Afficher la liste';
+        bouton.style.backgroundColor = '#90ee90'; // Un vert clair pour inciter à afficher
+    }
+}
+
+// 4. Bouton Retour en haut
+function scrollFunction() {
+    const btn = document.getElementById("scrollToTopBtn");
+    if (btn) {
+        if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+            btn.style.display = "block";
+        } else {
+            btn.style.display = "none";
+        }
+    }
+}
+
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
