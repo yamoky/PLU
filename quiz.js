@@ -1,11 +1,16 @@
 // quiz.js
 
-const NBRE_QUESTIONS_TOTAL = 10; // Définir le nombre de questions par session
+const NBRE_QUESTIONS_TOTAL = 10; 
+const TEMPS_LIMITE_PAR_QUESTION = 15; // 15 secondes par question
+
 let questionsPosees = 0;
 let score = 0;
 let questionActuelle = null;
+let timer; // Variable pour stocker le minuteur
+let tempsRestant; // Variable pour le temps restant
 
-// Fonction utilitaire pour mélanger un tableau
+// --- Fonctions utilitaires (inchangées) ---
+
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -14,7 +19,39 @@ function shuffleArray(array) {
     return array;
 }
 
-// Fonction pour générer une nouvelle question
+// --- Nouvelles fonctions Chrono ---
+
+function demarrerChrono() {
+    tempsRestant = TEMPS_LIMITE_PAR_QUESTION;
+    const chronoAffichage = document.getElementById('chrono-affichage');
+    chronoAffichage.textContent = `Temps : ${tempsRestant}s`;
+
+    // Nettoyer l'ancien timer s'il existe
+    clearInterval(timer); 
+
+    timer = setInterval(() => {
+        tempsRestant--;
+        chronoAffichage.textContent = `Temps : ${tempsRestant}s`;
+
+        if (tempsRestant <= 5) {
+            chronoAffichage.style.color = '#f44336'; // Rouge quand il reste peu de temps
+        } else {
+            chronoAffichage.style.color = '#005A9C';
+        }
+
+        if (tempsRestant <= 0) {
+            clearInterval(timer);
+            reponseAutomatique('Temps écoulé !'); // Passe à la question suivante
+        }
+    }, 1000); // Mise à jour toutes les secondes
+}
+
+function arreterChrono() {
+    clearInterval(timer);
+}
+
+// --- Logique du Quiz (Adaptée) ---
+
 function genererQuestion() {
     // 1. Choisir le produit correct aléatoirement
     const produitCorrect = PLU_DATA[Math.floor(Math.random() * PLU_DATA.length)];
@@ -23,7 +60,6 @@ function genererQuestion() {
     let choixFaux = [];
     const produitsRestants = PLU_DATA.filter(p => p.code !== produitCorrect.code);
     
-    // Mélanger les produits restants et prendre les 3 premiers
     shuffleArray(produitsRestants);
     choixFaux = produitsRestants.slice(0, 3);
     
@@ -41,7 +77,6 @@ function genererQuestion() {
     };
 }
 
-// Fonction pour afficher la question à l'écran
 function afficherQuestion(question) {
     const quizArea = document.getElementById('quiz-area');
     quizArea.innerHTML = '';
@@ -51,7 +86,6 @@ function afficherQuestion(question) {
     let reponseCible = '';
     
     if (question.type === 'code') {
-        // QUESTION: Quel est le code PLU pour ce produit ? (Afficher l'image)
         enonceHTML = `
             <h2>Quel est le code PLU pour : **${question.produit.nom.toUpperCase()}** ?</h2>
             <img src="assets/${question.produit.image}" alt="${question.produit.nom}">
@@ -59,7 +93,6 @@ function afficherQuestion(question) {
         reponseCible = question.produit.code;
         
     } else {
-        // QUESTION: Quel produit correspond à ce code PLU ? (Afficher le code)
         enonceHTML = `
             <h2>Quel produit correspond au code PLU : **${question.produit.code}** ?</h2>
             <img src="assets/${question.produit.image}" alt="${question.produit.nom}" style="opacity: 0.1;">
@@ -73,7 +106,8 @@ function afficherQuestion(question) {
         let valeurAffichee = question.type === 'code' ? choix.code : choix.nom;
         let valeurReponse = question.type === 'code' ? choix.code : choix.nom;
 
-        return `<button onclick="verifierReponse(this, '${valeurReponse}', '${reponseCible}', '${question.produit.image}', '${question.produit.nom}')">${valeurAffichee}</button>`;
+        // Appel de verifierReponse avec le bouton
+        return `<button onclick="verifierReponse(this, '${valeurReponse}', '${reponseCible}')">${valeurAffichee}</button>`;
     }).join('');
 
     quizArea.innerHTML = `
@@ -84,28 +118,55 @@ function afficherQuestion(question) {
             </div>
         </div>
     `;
+    
+    demarrerChrono(); // Démarrer le chrono à l'affichage de la question
 }
 
 
-// Fonction pour vérifier la réponse de l'utilisateur
-function verifierReponse(boutonClique, reponseUtilisateur, reponseCorrecte, image, nomProduit) {
+// Réponse automatique si le temps est écoulé
+function reponseAutomatique(message) {
+    // Désactiver les boutons
+    const boutons = document.querySelectorAll('.choix button');
+    boutons.forEach(btn => btn.disabled = true);
+    
+    // Afficher la correction (sans incrémenter le score, car hors-délai)
+    const reponseCorrecte = questionActuelle.type === 'code' ? questionActuelle.produit.code : questionActuelle.produit.nom;
+
+    boutons.forEach(btn => {
+        if (String(btn.textContent).trim().toLowerCase() === String(reponseCorrecte).trim().toLowerCase()) {
+             btn.classList.add('reponse-correcte');
+        }
+    });
+
+    const quizArea = document.getElementById('quiz-area');
+    quizArea.querySelector('img').src = `assets/${questionActuelle.produit.image}`;
+    quizArea.querySelector('img').alt = questionActuelle.produit.nom;
+    quizArea.querySelector('img').style.opacity = '1';
+
+    // Mettre à jour l'affichage du chrono
+    document.getElementById('chrono-affichage').textContent = message;
+
+    // Passer à la question suivante
+    afficherBoutonSuivant();
+}
+
+
+// Gestionnaire de réponse (appelé par l'utilisateur)
+function verifierReponse(boutonClique, reponseUtilisateur, reponseCorrecte) {
+    arreterChrono(); // Arrêter le minuteur immédiatement après la réponse
     
     // Désactiver tous les boutons après le clic
     const boutons = document.querySelectorAll('.choix button');
     boutons.forEach(btn => btn.disabled = true);
     
     const quizArea = document.getElementById('quiz-area');
+    let correct = false;
     
     // 1. Vérification
     if (String(reponseUtilisateur).trim().toLowerCase() === String(reponseCorrecte).trim().toLowerCase()) {
         score++;
+        correct = true;
         boutonClique.classList.add('reponse-correcte');
-        
-        // Afficher l'image dans le cas 'code vers nom'
-        if (questionActuelle.type === 'nom') {
-            quizArea.querySelector('img').style.opacity = '1';
-        }
-        
     } else {
         boutonClique.classList.add('reponse-incorrecte');
         
@@ -115,21 +176,27 @@ function verifierReponse(boutonClique, reponseUtilisateur, reponseCorrecte, imag
                  btn.classList.add('reponse-correcte');
             }
         });
-        
-        // Afficher l'image dans tous les cas
-        quizArea.querySelector('img').src = `assets/${image}`;
-        quizArea.querySelector('img').alt = nomProduit;
-        quizArea.querySelector('img').style.opacity = '1';
-
     }
+
+    // Afficher l'image dans tous les cas pour la correction
+    quizArea.querySelector('img').src = `assets/${questionActuelle.produit.image}`;
+    quizArea.querySelector('img').alt = questionActuelle.produit.nom;
+    quizArea.querySelector('img').style.opacity = '1';
+
 
     // 2. Mettre à jour le score et passer à la suite
     document.getElementById('score').textContent = `Score : ${score} / ${questionsPosees + 1}`;
     
-    if (questionsPosees < NBRE_QUESTIONS_TOTAL - 1) {
+    afficherBoutonSuivant();
+}
+
+
+function afficherBoutonSuivant() {
+    if (questionsPosees < NBRE_QUESTIONS_TOTAL) {
         document.getElementById('bouton-suivant').style.display = 'block';
     } else {
         // Fin du quiz
+        document.getElementById('bouton-suivant').style.display = 'none';
         document.getElementById('message-fin').innerHTML = `
             <div class="resultats">
                 <h2>FIN DU QUIZ !</h2>
@@ -141,8 +208,12 @@ function verifierReponse(boutonClique, reponseUtilisateur, reponseCorrecte, imag
     }
 }
 
+
 // Fonction de chargement de question
 function chargerNouvelleQuestion() {
+    // Remettre la couleur du chrono à la normale
+    document.getElementById('chrono-affichage').style.color = '#005A9C'; 
+    
     if (questionsPosees < NBRE_QUESTIONS_TOTAL) {
         questionsPosees++;
         questionActuelle = genererQuestion();
@@ -152,6 +223,7 @@ function chargerNouvelleQuestion() {
 
 // Fonction de réinitialisation
 function reinitialiserQuiz() {
+    arreterChrono();
     questionsPosees = 0;
     score = 0;
     document.getElementById('score').textContent = `Score : 0 / 0`;
@@ -161,10 +233,10 @@ function reinitialiserQuiz() {
 
 // Lancer la première question au chargement de la page
 window.onload = function() {
-    // Vérifier que la liste PLU_DATA existe et n'est pas vide
     if (typeof PLU_DATA !== 'undefined' && PLU_DATA.length > 4) {
         chargerNouvelleQuestion();
     } else {
         document.getElementById('quiz-area').innerHTML = '<p style="color: red;">Erreur : La base de données PLU_DATA est manquante ou insuffisante. Vérifiez le fichier data.js.</p>';
+        document.getElementById('chrono-affichage').style.display = 'none';
     }
 };
