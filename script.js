@@ -33,10 +33,11 @@ function genererCartes() {
         carte.setAttribute('data-nom', item.nom.toLowerCase());
         carte.setAttribute('data-code', item.code);
 
-        // On construit le HTML de la carte
+        // NOTE : Assurez-vous que vos images sont dans un dossier "assets"
+        // Si elles sont à la racine, retirez "assets/" ci-dessous
         carte.innerHTML = `
             <div class="plu-image">
-                <img src="assets/${item.image}" alt="${item.nom}" loading="lazy" onerror="this.src='https://via.placeholder.com/200?text=No+Image'">
+                <img src="assets/${item.image}" alt="${item.nom}" loading="lazy" onerror="this.src='https://via.placeholder.com/200?text=Image+Manquante'">
             </div>
             <div class="plu-nom">${item.nom}</div>
             <div class="plu-code">${item.code}</div>
@@ -75,7 +76,7 @@ function toggleListe() {
 
     if (!container) return;
 
-    // Si le conteneur est caché ou n'a pas de display défini (vide)
+    // Si le conteneur est caché ou n'a pas de display défini
     const styleDisplay = window.getComputedStyle(container).display;
 
     if (styleDisplay === 'none') {
@@ -87,28 +88,4 @@ function toggleListe() {
             bouton.style.backgroundColor = '#ddd'; // Gris
         }
     } else {
-        // MASQUER
-        container.style.display = 'none';
-        if(barreRecherche) barreRecherche.style.display = 'none';
-        if(bouton) {
-            bouton.textContent = 'Afficher la liste';
-            bouton.style.backgroundColor = '#90ee90'; // Vert clair
-        }
-    }
-}
-
-// --- Fonction Scroll to Top (Optionnel) ---
-function scrollFunction() {
-    const btn = document.getElementById("scrollToTopBtn");
-    if (btn) {
-        if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-            btn.style.display = "block";
-        } else {
-            btn.style.display = "none";
-        }
-    }
-}
-
-function scrollToTop() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
+        // MASQU
