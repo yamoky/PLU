@@ -1,233 +1,339 @@
-// quiz.js - Logique pour la page quiz (quiz.html)
+// quiz.js
+// Logique de la page de quiz
 
-const NBRE_QUESTIONS_TOTAL = 10; 
-const TEMPS_LIMITE_PAR_QUESTION = 15; // 15 secondes par question
+document.addEventListener("DOMContentLoaded", () => {
+  const products = (window.PLU_DATA && window.PLU_DATA.products) || [];
 
-let questionsPosees = 0;
-let score = 0;
-let questionActuelle = null;
-let timer; 
-let tempsRestant; 
+  const quizConfigForm = document.getElementById("quizConfigForm");
+  const questionCountInput = document.getElementById("questionCount");
+  const quizDurationInput = document.getElementById("quizDuration");
 
-// --- Fonctions utilitaires ---
+  const quizPanel = document.getElementById("quizPanel");
+  const resultsPanel = document.getElementById("resultsPanel");
 
-function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
+  const timerDisplay = document.getElementById("timerDisplay");
+  const currentQuestionIndexEl = document.getElementById(
+    "currentQuestionIndex"
+  );
+  const totalQuestionsEl = document.getElementById("totalQuestions");
+
+  const questionTextEl = document.getElementById("questionText");
+  const answersContainer = document.getElementById("answersContainer");
+
+  const resultsQuestionsCount = document.getElementById(
+    "resultsQuestionsCount"
+  );
+  const resultsCorrectCount = document.getElementById("resultsCorrectCount");
+  const resultsErrorsCount = document.getElementById("resultsErrorsCount");
+  const resultsSuccessRate = document.getElementById("resultsSuccessRate");
+  const mistakesList = document.getElementById("mistakesList");
+  const restartQuizBtn = document.getElementById("restartQuizBtn");
+
+  // État du quiz
+  let questions = [];
+  let currentQuestionIndex = 0;
+  let timerSecondsRemaining = 0;
+  let timerIntervalId = null;
+  let stats = {
+    totalAsked: 0,
+    correct: 0,
+    errors: 0,
+    answersLog: [],
+  };
+
+  // --------- Utilitaires ----------
+  function shuffleArray(arr) {
+    const copy = arr.slice();
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
     }
-    return array;
-}
+    return copy;
+  }
 
-// --- Fonctions Chrono ---
+  function formatTime(seconds) {
+    const m = Math.floor(seconds / 60)
+      .toString()
+      .padStart(2, "0");
+    const s = Math.floor(seconds % 60)
+      .toString()
+      .padStart(2, "0");
+    return `${m}:${s}`;
+  }
 
-function demarrerChrono() {
-    tempsRestant = TEMPS_LIMITE_PAR_QUESTION;
-    const chronoAffichage = document.getElementById('chrono-affichage');
-    chronoAffichage.textContent = `Temps : ${tempsRestant}s`;
+  // --------- Génération des questions ----------
+  function generateQuestionFromProduct(product) {
+    // type 0 => "Quel est le code de Banane ?"
+    // type 1 => "Quel produit correspond au code 4011 ?"
+    const type = Math.random() < 0.5 ? 0 : 1;
 
-    clearInterval(timer); 
+    if (type === 0) {
+      // Code pour un produit donné
+      const correctAnswer = String(product.code);
+      const wrongProducts = shuffleArray(
+        products.filter((p) => p.code !== product.code)
+      ).slice(0, 3);
+      const options = shuffleArray([
+        correctAnswer,
+        ...wrongProducts.map((p) => String(p.code)),
+      ]);
 
-    timer = setInterval(() => {
-        tempsRestant--;
-        chronoAffichage.textContent = `Temps : ${tempsRestant}s`;
-
-        if (tempsRestant <= 5) {
-            chronoAffichage.style.color = '#f44336'; 
-        } else {
-            chronoAffichage.style.color = '#005A9C';
-        }
-
-        if (tempsRestant <= 0) {
-            clearInterval(timer);
-            reponseAutomatique('Temps écoulé !'); 
-        }
-    }, 1000); 
-}
-
-function arreterChrono() {
-    clearInterval(timer);
-}
-
-// --- Logique du Quiz (QCM) ---
-
-function genererQuestion() {
-    if (typeof PLU_DATA === 'undefined' || PLU_DATA.length < 4) {
-        return null;
-    }
-    
-    const produitCorrect = PLU_DATA[Math.floor(Math.random() * PLU_DATA.length)];
-    
-    let choixFaux = [];
-    const produitsRestants = PLU_DATA.filter(p => p.code !== produitCorrect.code);
-    
-    shuffleArray(produitsRestants);
-    choixFaux = produitsRestants.slice(0, 3);
-    
-    const tousLesChoix = [produitCorrect, ...choixFaux];
-    shuffleArray(tousLesChoix);
-    
-    const typeQuestion = Math.random() < 0.5 ? 'code' : 'nom'; 
-
-    return {
-        produit: produitCorrect,
-        choix: tousLesChoix,
-        type: typeQuestion
-    };
-}
-
-function afficherQuestion(question) {
-    const quizArea = document.getElementById('quiz-area');
-    quizArea.innerHTML = '';
-    document.getElementById('bouton-suivant').style.display = 'none';
-    
-    let enonceHTML = '';
-    let reponseCible = '';
-    
-    if (question.type === 'code') {
-        enonceHTML = `
-            <h2>Quel est le code PLU pour : ${question.produit.nom.toUpperCase()} ?</h2>
-            <img src="assets/${question.produit.image}" alt="${question.produit.nom}">
-        `;
-        reponseCible = question.produit.code;
-        
+      return {
+        type: "NAME_TO_CODE",
+        questionText: `Quel est le code PLU pour : « ${product.name} » ?`,
+        correctAnswer,
+        options,
+      };
     } else {
-        enonceHTML = `
-            <h2>Quel produit correspond au code PLU : ${question.produit.code} ?</h2>
-            <img src="assets/${question.produit.image}" alt="${question.produit.nom}" style="opacity: 0.1;">
-            <p style="font-style: italic; font-size: 0.9em;">(L'image sera révélée après la réponse)</p>
-        `;
-        reponseCible = question.produit.nom;
+      // Produit pour un code donné
+      const correctAnswer = product.name;
+      const wrongProducts = shuffleArray(
+        products.filter((p) => p.code !== product.code)
+      ).slice(0, 3);
+      const options = shuffleArray([
+        correctAnswer,
+        ...wrongProducts.map((p) => p.name),
+      ]);
+
+      return {
+        type: "CODE_TO_NAME",
+        questionText: `Quel produit correspond au code PLU : ${product.code} ?`,
+        correctAnswer,
+        options,
+      };
+    }
+  }
+
+  function generateQuestions(count) {
+    const availableCount = Math.min(count, products.length * 2);
+    const selectedQuestions = [];
+
+    for (let i = 0; i < availableCount; i++) {
+      const randomProduct =
+        products[Math.floor(Math.random() * products.length)];
+      selectedQuestions.push(generateQuestionFromProduct(randomProduct));
     }
 
-    const choixHTML = question.choix.map(choix => {
-        let valeurAffichee = question.type === 'code' ? choix.code : choix.nom;
-        let valeurReponse = question.type === 'code' ? choix.code : choix.nom;
+    return selectedQuestions;
+  }
 
-        return `<button onclick="verifierReponse(this, '${valeurReponse}', '${reponseCible}')">${valeurAffichee}</button>`;
-    }).join('');
+  // --------- Timer ----------
+  function startTimer(totalSeconds) {
+    timerSecondsRemaining = totalSeconds;
+    timerDisplay.textContent = formatTime(timerSecondsRemaining);
 
-    quizArea.innerHTML = `
-        <div class="question-card">
-            ${enonceHTML}
-            <div class="choix">
-                ${choixHTML}
-            </div>
-        </div>
-    `;
-    
-    demarrerChrono(); 
-}
+    timerIntervalId = setInterval(() => {
+      timerSecondsRemaining -= 1;
+      timerDisplay.textContent = formatTime(timerSecondsRemaining);
 
-function reponseAutomatique(message) {
-    const boutons = document.querySelectorAll('.choix button');
-    boutons.forEach(btn => btn.disabled = true);
-    
-    const reponseCorrecte = questionActuelle.type === 'code' ? questionActuelle.produit.code : questionActuelle.produit.nom;
+      if (timerSecondsRemaining <= 0) {
+        clearInterval(timerIntervalId);
+        timerIntervalId = null;
+        endQuiz("time");
+      }
+    }, 1000);
+  }
 
-    boutons.forEach(btn => {
-        if (String(btn.textContent).trim().toLowerCase() === String(reponseCorrecte).trim().toLowerCase()) {
-             btn.classList.add('reponse-correcte');
+  function stopTimer() {
+    if (timerIntervalId !== null) {
+      clearInterval(timerIntervalId);
+      timerIntervalId = null;
+    }
+  }
+
+  // --------- Affichage d'une question ----------
+  function displayQuestion() {
+    const question = questions[currentQuestionIndex];
+    if (!question) {
+      endQuiz("questions");
+      return;
+    }
+
+    currentQuestionIndexEl.textContent = currentQuestionIndex + 1;
+    totalQuestionsEl.textContent = questions.length;
+
+    questionTextEl.textContent = question.questionText;
+    answersContainer.innerHTML = "";
+
+    question.options.forEach((option) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "btn answer-btn";
+      btn.textContent = option;
+      btn.dataset.value = option;
+      btn.addEventListener("click", () => handleAnswer(btn, question));
+      answersContainer.appendChild(btn);
+    });
+  }
+
+  // --------- Gestion de la réponse ----------
+  let questionLocked = false;
+
+  function handleAnswer(button, question) {
+    if (questionLocked) return;
+    questionLocked = true;
+
+    const selectedValue = button.dataset.value;
+    const isCorrect = selectedValue === question.correctAnswer;
+
+    // Style visuel
+    const answerButtons = answersContainer.querySelectorAll(".answer-btn");
+    answerButtons.forEach((btn) => {
+      const value = btn.dataset.value;
+      if (value === question.correctAnswer) {
+        btn.classList.add("answer-correct");
+      } else if (value === selectedValue) {
+        btn.classList.add("answer-selected");
+        if (!isCorrect) {
+          btn.classList.add("answer-wrong");
         }
+      }
+      btn.disabled = true;
     });
 
-    const quizArea = document.getElementById('quiz-area');
-    const imgElement = quizArea.querySelector('img');
-    if (imgElement) {
-        imgElement.src = `assets/${questionActuelle.produit.image}`;
-        imgElement.alt = questionActuelle.produit.nom;
-        imgElement.style.opacity = '1';
-    }
-
-    document.getElementById('chrono-affichage').textContent = message;
-
-    afficherBoutonSuivant();
-}
-
-
-function verifierReponse(boutonClique, reponseUtilisateur, reponseCorrecte) {
-    arreterChrono(); 
-    
-    const boutons = document.querySelectorAll('.choix button');
-    boutons.forEach(btn => btn.disabled = true);
-    
-    const quizArea = document.getElementById('quiz-area');
-    
-    if (String(reponseUtilisateur).trim().toLowerCase() === String(reponseCorrecte).trim().toLowerCase()) {
-        score++;
-        boutonClique.classList.add('reponse-correcte');
+    // Mise à jour des stats
+    stats.totalAsked += 1;
+    if (isCorrect) {
+      stats.correct += 1;
     } else {
-        boutonClique.classList.add('reponse-incorrecte');
-        
-        boutons.forEach(btn => {
-            if (String(btn.textContent).trim().toLowerCase() === String(reponseCorrecte).trim().toLowerCase()) {
-                 btn.classList.add('reponse-correcte');
-            }
-        });
+      stats.errors += 1;
     }
 
-    const imgElement = quizArea.querySelector('img');
-    if (imgElement) {
-        imgElement.src = `assets/${questionActuelle.produit.image}`;
-        imgElement.alt = questionActuelle.produit.nom;
-        imgElement.style.opacity = '1';
+    stats.answersLog.push({
+      questionText: question.questionText,
+      correctAnswer: question.correctAnswer,
+      userAnswer: selectedValue,
+      isCorrect,
+    });
+
+    // Passage à la question suivante après un petit délai
+    setTimeout(() => {
+      currentQuestionIndex += 1;
+      questionLocked = false;
+
+      if (currentQuestionIndex >= questions.length) {
+        endQuiz("questions");
+      } else {
+        displayQuestion();
+      }
+    }, 600);
+  }
+
+  // --------- Fin du quiz + résultats ----------
+  function endQuiz(reason) {
+    stopTimer();
+    quizPanel.hidden = true;
+    resultsPanel.hidden = false;
+
+    const total = stats.totalAsked || 0;
+    const correct = stats.correct || 0;
+    const errors = stats.errors || 0;
+    const successRate = total > 0 ? Math.round((correct / total) * 100) : 0;
+
+    resultsQuestionsCount.textContent = total;
+    resultsCorrectCount.textContent = correct;
+    resultsErrorsCount.textContent = errors;
+    resultsSuccessRate.textContent = successRate;
+
+    mistakesList.innerHTML = "";
+
+    const mistakes = stats.answersLog.filter((a) => !a.isCorrect);
+
+    if (!mistakes.length) {
+      const p = document.createElement("p");
+      p.textContent = "Bravo ! Aucune erreur sur cette session 🎉";
+      mistakesList.appendChild(p);
+      return;
     }
 
-    document.getElementById('score').textContent = `Score : ${score} / ${questionsPosees + 1}`;
-    
-    afficherBoutonSuivant();
-}
+    mistakes.forEach((mistake, index) => {
+      const card = document.createElement("article");
+      card.className = "mistake-card";
 
+      const title = document.createElement("h4");
+      title.textContent = `Erreur ${index + 1}`;
 
-function afficherBoutonSuivant() {
-    if (questionsPosees < NBRE_QUESTIONS_TOTAL) {
-        document.getElementById('bouton-suivant').style.display = 'block';
-    } else {
-        document.getElementById('bouton-suivant').style.display = 'none';
-        
-        // CORRECTION: Suppression des ** du message de fin
-        document.getElementById('message-fin').innerHTML = `
-            <div class="resultats">
-                <h2>FIN DU QUIZ !</h2>
-                <p>Votre score final est de : ${score} / ${NBRE_QUESTIONS_TOTAL}</p> 
-                <p style="margin-top: 15px;"><button onclick="reinitialiserQuiz()" class="bouton-quiz">Recommencer le Quiz</button></p>
-            </div>
-        `;
-        document.getElementById('message-fin').style.display = 'block';
+      const q = document.createElement("p");
+      q.innerHTML = `<strong>Question :</strong> ${mistake.questionText}`;
+
+      const yourAnswer = document.createElement("p");
+      yourAnswer.innerHTML = `<strong>Ta réponse :</strong> ${mistake.userAnswer}`;
+
+      const correctAnswer = document.createElement("p");
+      correctAnswer.innerHTML = `<strong>Bonne réponse :</strong> ${mistake.correctAnswer}`;
+
+      card.appendChild(title);
+      card.appendChild(q);
+      card.appendChild(yourAnswer);
+      card.appendChild(correctAnswer);
+
+      mistakesList.appendChild(card);
+    });
+  }
+
+  function resetQuizState() {
+    questions = [];
+    currentQuestionIndex = 0;
+    stats = {
+      totalAsked: 0,
+      correct: 0,
+      errors: 0,
+      answersLog: [],
+    };
+    questionLocked = false;
+    timerSecondsRemaining = 0;
+    timerDisplay.textContent = "00:00";
+  }
+
+  // --------- Écouteurs ----------
+  quizConfigForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    if (!products.length) {
+      alert(
+        "Aucun produit défini dans data.js. Ajoute des produits pour pouvoir lancer un quiz."
+      );
+      return;
     }
-}
 
+    const questionCount = parseInt(questionCountInput.value, 10);
+    const durationMinutes = parseInt(quizDurationInput.value, 10);
 
-function chargerNouvelleQuestion() {
-    document.getElementById('chrono-affichage').style.color = '#005A9C'; 
-    
-    if (questionsPosees < NBRE_QUESTIONS_TOTAL) {
-        questionsPosees++;
-        questionActuelle = genererQuestion();
-        if (questionActuelle) {
-             afficherQuestion(questionActuelle);
-        } else {
-             document.getElementById('quiz-area').innerHTML = '<p style="color: red;">Erreur lors de la génération de la question. Vérifiez data.js.</p>';
-        }
+    if (!Number.isFinite(questionCount) || questionCount <= 0) {
+      alert("Merci de saisir un nombre de questions valide.");
+      return;
     }
-}
 
-function reinitialiserQuiz() {
-    arreterChrono();
-    questionsPosees = 0;
-    score = 0;
-    document.getElementById('score').textContent = `Score : 0 / 0`;
-    document.getElementById('message-fin').style.display = 'none';
-    chargerNouvelleQuestion();
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    if (typeof PLU_DATA !== 'undefined' && PLU_DATA.length >= 4) {
-        chargerNouvelleQuestion();
-    } else {
-        document.getElementById('quiz-area').innerHTML = '<p style="color: red;">Erreur : La base de données PLU_DATA est manquante ou insuffisante (minimum 4 produits requis). Vérifiez le fichier data.js.</p>';
-        if (document.getElementById('chrono-affichage')) {
-            document.getElementById('chrono-affichage').style.display = 'none';
-        }
+    if (!Number.isFinite(durationMinutes) || durationMinutes <= 0) {
+      alert("Merci de saisir une durée de session valide (en minutes).");
+      return;
     }
+
+    resetQuizState();
+
+    const totalSeconds = durationMinutes * 60;
+    questions = generateQuestions(questionCount);
+
+    quizPanel.hidden = false;
+    resultsPanel.hidden = false; // on l'affiche mais il est vide tant qu'on a pas terminé
+    resultsPanel.hidden = true; // donc on le re-cache ici
+    displayQuestion();
+    startTimer(totalSeconds);
+
+    window.scrollTo({ top: quizPanel.offsetTop - 20, behavior: "smooth" });
+  });
+
+  restartQuizBtn.addEventListener("click", () => {
+    stopTimer();
+    resetQuizState();
+
+    quizPanel.hidden = true;
+    resultsPanel.hidden = true;
+
+    // Scroll vers la config pour relancer
+    window.scrollTo({
+      top: quizConfigForm.offsetTop - 20,
+      behavior: "smooth",
+    });
+  });
 });
