@@ -12,13 +12,15 @@
 
     <input type="text" id="recherche" onkeyup="filtrerCartes()" placeholder="Rechercher un code PLU ou un produit...">
 
+    <div id="boutons-liste-container">
+        <a href="quiz.html" class="bouton-quiz">Passer au Quiz !</a>
+
+        <button id="masquer-bouton" class="bouton-quiz" onclick="toggleListe()">Masquer la liste</button>
+    </div>
+
     <div id="cartes-container">
         </div>
     
-    <p style="text-align: center; margin-top: 30px;">
-        <a href="quiz.html" class="bouton-quiz">Passer au Quiz !</a>
-    </p>
-
     <script src="data.js"></script>
     <script src="script.js"></script>
 </body>
