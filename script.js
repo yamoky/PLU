@@ -1,84 +1,107 @@
-// script.js
-// Gère affichage/masquage de la liste, recherche en temps réel.
+// script.js - Code pour la page d'accueil (index.html) UNIQUEMENT
 
-(function(){
-  // Récupère éléments
-  const toggleBtn = document.getElementById('toggle-list');
-  const productSection = document.getElementById('product-list-section');
-  const searchWrap = document.getElementById('search-wrap');
-  const searchInput = document.getElementById('search-input');
-  const productListEl = document.getElementById('product-list');
-  const noResults = document.getElementById('no-results');
-  const searchCount = document.getElementById('search-count');
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. On lance la génération de la liste au chargement de la page
+    genererCartes();
+    
+    // 2. Gestion du bouton "Retour en haut"
+    window.onscroll = function() { scrollFunction() };
+});
 
-  // Data
-  const products = (window.PLU_DATA && window.PLU_DATA.products) || [];
+// --- Fonction pour créer les cartes HTML à partir de data.js ---
+function genererCartes() {
+    const container = document.getElementById('cartes-container');
+    
+    if (!container) return; 
 
-  // Render la liste complète
-  function renderList(items){
-    productListEl.innerHTML = '';
-    if(!items.length){
-      noResults.classList.remove('hidden');
-      return;
-    } else {
-      noResults.classList.add('hidden');
+    if (typeof PLU_DATA === 'undefined') {
+        container.innerHTML = "<p style='color:red; text-align:center;'>Erreur : Le fichier data.js n'est pas chargé ou est vide.</p>";
+        console.error("PLU_DATA est introuvable.");
+        return;
     }
 
-    const frag = document.createDocumentFragment();
-    items.forEach(p => {
-      const li = document.createElement('li');
-      li.className = 'product-item';
-      li.innerHTML = `
-        <div class="code">${escapeHtml(p.code)}</div>
-        <div class="name">${escapeHtml(p.name)}</div>
-        <div class="meta">${escapeHtml(p.category || '')}</div>
-      `;
-      frag.appendChild(li);
+    container.innerHTML = ''; 
+
+    PLU_DATA.forEach(item => {
+        const carte = document.createElement('div');
+        carte.className = 'carte-plu';
+        
+        carte.setAttribute('data-nom', item.nom.toLowerCase());
+        carte.setAttribute('data-code', item.code);
+
+        // Assurez-vous que le chemin 'assets/' est correct pour vos images
+        carte.innerHTML = `
+            <div class="plu-image">
+                <img src="assets/${item.image}" alt="${item.nom}" loading="lazy" onerror="this.src='https://via.placeholder.com/200?text=Image+Manquante'">
+            </div>
+            <div class="plu-nom">${item.nom}</div>
+            <div class="plu-code">${item.code}</div>
+        `;
+        
+        container.appendChild(carte);
     });
-    productListEl.appendChild(frag);
-  }
+}
 
-  // Escape minimal pour sécurité
-  function escapeHtml(s= '') {
-    return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  }
+// --- Fonction de Recherche (Appelée par l'input "onkeyup" dans index.html) ---
+function filtrerCartes() {
+    const input = document.getElementById('recherche');
+    if (!input) return;
 
-  // Filtre par code ou nom (insensible à la casse)
-  function filter(query){
-    if(!query) return products.slice();
-    const q = query.trim().toLowerCase();
-    return products.filter(p => (p.code && p.code.toLowerCase().includes(q)) || (p.name && p.name.toLowerCase().includes(q)));
-  }
+    const filter = input.value.toLowerCase();
+    const cartes = document.getElementsByClassName('carte-plu');
 
-  // Toggle affichage
-  function toggleList(){
-    const hidden = productSection.classList.toggle('hidden');
-    const show = !hidden;
-    productSection.setAttribute('aria-hidden', hidden ? 'true' : 'false');
-    searchWrap.setAttribute('aria-hidden', hidden ? 'true' : 'false');
-    toggleBtn.textContent = show ? 'Masquer la liste des produits' : 'Afficher la liste des produits';
-    if(show){
-      renderList(products);
-      searchInput.focus();
-      searchCount.textContent = `${products.length} produits`;
-    } else {
-      // clear search
-      searchInput.value = '';
-      searchCount.textContent = '';
+    for (let i = 0; i < cartes.length; i++) {
+        const nom = cartes[i].getAttribute('data-nom');
+        const code = cartes[i].getAttribute('data-code');
+
+        if (nom.includes(filter) || code.includes(filter)) {
+            cartes[i].style.display = ""; 
+        } else {
+            cartes[i].style.display = "none";
+        }
     }
-  }
+}
 
-  // Gestion recherche
-  function onSearchInput(e){
-    const q = e.target.value;
-    const result = filter(q);
-    renderList(result);
-    searchCount.textContent = `${result.length} produit(s) trouvé(s)`;
-  }
+// --- Fonction Masquer/Afficher la liste ---
+function toggleListe() {
+    const container = document.getElementById('cartes-container');
+    const bouton = document.getElementById('masquer-bouton');
+    const barreRecherche = document.getElementById('recherche');
 
-  // Initial
-  toggleBtn.addEventListener('click', toggleList);
-  searchInput.addEventListener('input', onSearchInput);
-  // Pré-rendu caché (ne pas afficher la liste automatiquement)
-  productSection.classList.add('hidden');
-})();
+    if (!container) return;
+
+    // Affiche/masque basé sur l'état actuel de display
+    if (container.style.display === 'none') {
+        // AFFICHER
+        container.style.display = 'grid'; 
+        if(barreRecherche) barreRecherche.style.display = 'block';
+        if(bouton) {
+            bouton.textContent = 'Masquer la liste';
+            bouton.style.backgroundColor = '#ddd'; 
+        }
+    } else {
+        // MASQUER
+        container.style.display = 'none';
+        if(barreRecherche) barreRecherche.style.display = 'none';
+        if(bouton) {
+            bouton.textContent = 'Afficher la liste';
+            bouton.style.backgroundColor = '#90ee90'; 
+        }
+    }
+}
+
+// --- Fonction Scroll to Top ---
+function scrollFunction() {
+    const btn = document.getElementById("scrollToTopBtn");
+    if (btn) {
+        if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+            btn.style.display = "block";
+        } else {
+            btn.style.display = "none";
+        }
+    }
+}
+
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
