@@ -1,180 +1,181 @@
-/* RESET et Responsiveness de base */
+/* ------------------------------------------- */
+/* 1. RESET et BASE */
+/* ------------------------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
 * {
     box-sizing: border-box; 
+    margin: 0;
+    padding: 0;
 }
 
 body {
-    font-family: sans-serif;
-    padding: 20px;
-    background-color: #f4f4f4;
+    font-family: 'Roboto', sans-serif;
+    padding: 10px;
+    background-color: #eef2f6; /* Fond très clair et doux */
+    color: #333;
+    line-height: 1.6;
 }
 
 h1 {
     color: #005A9C; /* Bleu LIDL */
     text-align: center;
-    margin-bottom: 20px;
+    margin: 20px 0 30px;
+    font-size: 2.2em;
+    font-weight: 700;
 }
+
+/* ------------------------------------------- */
+/* 2. ÉLÉMENTS COMMUNS (Bouton et Recherche) */
+/* ------------------------------------------- */
 
 /* Barre de recherche */
 #recherche {
-    width: 100%; /* Prend toute la largeur disponible */
-    padding: 12px;
-    margin-bottom: 20px;
+    width: 100%; 
+    padding: 14px;
+    margin-bottom: 25px;
     border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 16px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    font-size: 1em;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    transition: border-color 0.3s;
 }
 
-/* Conteneur de tableau pour gérer le défilement horizontal si nécessaire */
+#recherche:focus {
+    border-color: #005A9C;
+    outline: none;
+}
+
+/* Bouton Quiz/Retour */
+.bouton-quiz {
+    display: inline-block;
+    padding: 12px 25px;
+    background-color: #FFC72C; /* Jaune LIDL */
+    color: #333;
+    text-decoration: none;
+    font-weight: 700;
+    border-radius: 6px;
+    transition: background-color 0.3s, transform 0.1s;
+    border: none;
+    cursor: pointer;
+}
+
+.bouton-quiz:hover {
+    background-color: #ffb800; /* Jaune plus foncé au survol */
+    transform: translateY(-1px);
+}
+
+/* Bouton retour (gris) */
+.bouton-quiz[style*="background-color: #ccc"] {
+    background-color: #ccc !important;
+    color: #333;
+}
+.bouton-quiz[style*="background-color: #ccc"]:hover {
+    background-color: #aaa !important;
+}
+
+
+/* ------------------------------------------- */
+/* 3. PAGE LISTE (index.html) */
+/* ------------------------------------------- */
+
 .tableau-conteneur {
     overflow-x: auto; 
 }
 
 #tablePLU {
     width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 30px;
+    border-collapse: separate; /* Pour les border-radius */
+    border-spacing: 0;
     background-color: white;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    overflow: hidden; /* Assure que le border-radius s'applique */
 }
 
 #tablePLU th, #tablePLU td {
-    padding: 12px 15px;
+    padding: 15px 18px;
     text-align: left;
-    border-bottom: 1px solid #ddd;
-    vertical-align: middle;
+    border-bottom: 1px solid #eee; /* Lignes de séparation douces */
 }
 
 #tablePLU th {
     background-color: #005A9C;
     color: white;
     cursor: pointer;
-    position: sticky; /* L'entête reste visible si vous faites défiler */
+    position: sticky; 
     top: 0;
+    font-weight: 400;
+    text-transform: uppercase;
+    font-size: 0.9em;
+}
+
+#tablePLU tbody tr:nth-child(even) {
+    background-color: #f9f9f9; /* Bandes alternées pour la lisibilité */
 }
 
 #tablePLU tbody tr:hover {
-    background-color: #f1f1f1;
+    background-color: #e0f0ff; /* Bleu très léger au survol */
 }
 
 /* Images */
 #tablePLU img {
-    width: 80px; 
-    height: 80px;
+    width: 60px; /* Légèrement plus petites */
+    height: 60px;
     object-fit: cover; 
     border-radius: 4px;
+    border: 1px solid #ddd;
 }
 
-/* Bouton Quiz (réutilisé pour le quiz.html) */
-.bouton-quiz {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #FFC72C; /* Jaune LIDL */
-    color: #000;
-    text-decoration: none;
-    font-weight: bold;
-    border-radius: 6px;
-    transition: background-color 0.3s;
-}
+/* ------------------------------------------- */
+/* 4. PAGE QUIZ (quiz.html) */
+/* ------------------------------------------- */
 
-.bouton-quiz:hover {
-    background-color: #ffb800;
-}
-
-/* --- ADAPTATION RESPONSIVE --- */
-
-/* Pour les tablettes et les mobiles */
-@media screen and (max-width: 768px) {
-    body {
-        padding: 10px;
-    }
-
-    /* Réduit le padding pour gagner de la place */
-    #tablePLU th, #tablePLU td {
-        padding: 8px 10px;
-    }
-    
-    /* Assure que la colonne Code PLU (index 0) ait une largeur suffisante */
-    #tablePLU td:nth-child(1), 
-    #tablePLU th:nth-child(1) {
-        min-width: 70px; 
-    }
-}
-
-/* Pour les très petits écrans (smartphones) */
-@media screen and (max-width: 500px) {
-    
-    /* Cache la colonne Image pour maximiser l'espace pour le texte */
-    #tablePLU th:nth-child(3), 
-    #tablePLU td:nth-child(3) {
-        display: none; 
-    }
-    
-    h1 {
-        font-size: 1.5em;
-    }
-}
-
-
-/* Styles spécifiques au quiz pour la lisibilité */
 .quiz-container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
+    max-width: 650px;
+    margin: 20px auto;
+    padding: 30px;
     background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.15);
 }
+
 .question-card {
-    border: 1px solid #ccc;
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 6px;
+    padding: 25px;
+    margin-bottom: 30px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
     text-align: center;
+    background-color: #fff;
 }
+
+.question-card h2 {
+    margin-bottom: 20px;
+    font-size: 1.4em;
+    color: #005A9C;
+}
+
 .question-card img {
     max-width: 100%;
-    height: 200px;
+    height: 220px;
     object-fit: contain;
-    border-radius: 4px;
-    margin-bottom: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #eee;
+    transition: opacity 0.5s;
 }
+
+/* Boutons de Choix */
 .choix button {
     display: block;
     width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #005A9C;
+    padding: 15px;
+    margin-bottom: 12px;
+    border: 2px solid #005A9C;
     background-color: #fff;
     color: #005A9C;
-    font-size: 1em;
+    font-size: 1.1em;
+    font-weight: 700;
     cursor: pointer;
-    border-radius: 4px;
-    transition: background-color 0.2s, color 0.2s;
-}
-.choix button:hover {
-    background-color: #005A9C;
-    color: white;
-}
-/* Feedback */
-.reponse-correcte { background-color: #4CAF50 !important; color: white !important; }
-.reponse-incorrecte { background-color: #f44336 !important; color: white !important; }
-
-.resultats {
-    text-align: center;
-    padding: 20px;
-    border: 2px dashed #005A9C;
     border-radius: 8px;
-}
-
-/* Responsive - S'assurer que les boutons sont lisibles sur petit écran */
-@media screen and (max-width: 600px) {
-    .quiz-container {
-        padding: 10px;
-    }
-    .choix button {
-        padding: 12px 8px;
-        font-size: 0.9em;
-    }
-}
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
