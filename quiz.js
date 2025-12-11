@@ -30,6 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const mistakesList = document.getElementById("mistakesList");
   const restartQuizBtn = document.getElementById("restartQuizBtn");
 
+  // État du quiz
   let questions = [];
   let currentQuestionIndex = 0;
   let timerSecondsRemaining = 0;
@@ -41,6 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
     answersLog: [],
   };
 
+  // --------- Utilitaires ----------
   function shuffleArray(arr) {
     const copy = arr.slice();
     for (let i = copy.length - 1; i > 0; i--) {
@@ -61,42 +63,52 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // --------- Génération des questions ----------
+  // On unifie le format des options :
+  // question.options = [ { label: string, product: { ... } }, ... ]
   function generateQuestionFromProduct(product) {
+    // type 0 => "Quel est le code pour Chocolatine ?"
+    // type 1 => "Quel produit correspond au code 55 ?"
     const type = Math.random() < 0.5 ? 0 : 1;
 
     if (type === 0) {
-      const correctAnswer = String(product.code);
+      // NOM -> CODE : on montre l'image du produit en haut
       const wrongProducts = shuffleArray(
         products.filter((p) => p.code !== product.code)
       ).slice(0, 3);
-      const options = shuffleArray([
-        correctAnswer,
-        ...wrongProducts.map((p) => String(p.code)),
-      ]);
+
+      const optionProducts = shuffleArray([product, ...wrongProducts]);
+
+      const options = optionProducts.map((p) => ({
+        label: String(p.code),
+        product: p,
+      }));
 
       return {
         type: "NAME_TO_CODE",
+        product, // utilisé pour l'image de la question
         questionText: `Quel est le code PLU pour : « ${product.name} » ?`,
-        correctAnswer,
+        correctAnswer: String(product.code),
         options,
-        product,
       };
     } else {
-      const correctAnswer = product.name;
+      // CODE -> NOM : pas d'image en haut, mais chaque réponse a son image
       const wrongProducts = shuffleArray(
         products.filter((p) => p.code !== product.code)
       ).slice(0, 3);
-      const options = shuffleArray([
-        correctAnswer,
-        ...wrongProducts.map((p) => p.name),
-      ]);
+
+      const optionProducts = shuffleArray([product, ...wrongProducts]);
+
+      const options = optionProducts.map((p) => ({
+        label: p.name,
+        product: p,
+      }));
 
       return {
         type: "CODE_TO_NAME",
+        product, // si un jour tu veux l'utiliser
         questionText: `Quel produit correspond au code PLU : ${product.code} ?`,
-        correctAnswer,
+        correctAnswer: product.name,
         options,
-        product,
       };
     }
   }
@@ -152,24 +164,56 @@ document.addEventListener("DOMContentLoaded", () => {
     questionTextEl.textContent = question.questionText;
     answersContainer.innerHTML = "";
 
-    // Image du produit
-    if (question.product && question.product.image && questionImageEl) {
+    // Gestion de l'image de la question :
+    // - NAME_TO_CODE -> on montre l'image du produit
+    // - CODE_TO_NAME -> on la cache (sinon on donne la réponse)
+    if (
+      question.type === "NAME_TO_CODE" &&
+      question.product &&
+      question.product.image &&
+      questionImageEl
+    ) {
       questionImageEl.src = question.product.image;
       questionImageEl.alt = question.product.name || "Produit du quiz";
-      questionImageEl.style.visibility = "visible";
+      questionImageEl.style.display = "block";
       questionImageEl.onerror = () => {
-        questionImageEl.style.visibility = "hidden";
+        questionImageEl.style.display = "none";
       };
     } else if (questionImageEl) {
-      questionImageEl.style.visibility = "hidden";
+      questionImageEl.style.display = "none";
     }
 
-    question.options.forEach((option) => {
+    // Réponses :
+    question.options.forEach((opt) => {
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "btn answer-btn";
-      btn.textContent = option;
-      btn.dataset.value = option;
+      btn.dataset.value = opt.label;
+
+      // Si on est sur CODE_TO_NAME, on ajoute une petite image dans chaque option
+      if (question.type === "CODE_TO_NAME" && opt.product && opt.product.image) {
+        const imgWrapper = document.createElement("div");
+        imgWrapper.className = "answer-image-wrapper";
+
+        const img = document.createElement("img");
+        img.className = "answer-image";
+        img.src = opt.product.image;
+        img.alt = opt.product.name || "Produit";
+        img.loading = "lazy";
+
+        imgWrapper.appendChild(img);
+
+        const labelSpan = document.createElement("span");
+        labelSpan.className = "answer-label";
+        labelSpan.textContent = opt.label;
+
+        btn.appendChild(imgWrapper);
+        btn.appendChild(labelSpan);
+      } else {
+        // Cas NAME_TO_CODE : on affiche juste le texte (code PLU)
+        btn.textContent = opt.label;
+      }
+
       btn.addEventListener("click", () => handleAnswer(btn, question));
       answersContainer.appendChild(btn);
     });
