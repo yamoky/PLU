@@ -180,14 +180,11 @@ body {
 }
 
 /* ---------- Grille produits ---------- */
-/* auto-fit + minmax => 
-   - smartphone ~2 colonnes
-   - tablette 3 colonnes
-   - gros écran 4–5 colonnes */
 .product-grid {
   display: grid;
   gap: 1rem;
   margin-top: 1rem;
+  /* auto-fit = 2 colonnes sur mobile, 3–4–5 sur écrans plus grands */
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
 }
 
@@ -210,7 +207,7 @@ body {
   border-color: rgba(56, 189, 248, 0.7);
 }
 
-/* toutes les images produits sont carrées et recadrées */
+/* toutes les images produits sont des carrés */
 .product-image-wrapper {
   position: relative;
   width: 100%;
@@ -360,12 +357,7 @@ body {
   }
 }
 
-.quiz-question {
-  margin-bottom: 0.8rem;
-  font-size: 1.1rem;
-}
-
-/* Image du quiz */
+/* Image principale du quiz (pour les questions "Quel est le code de ... ?") */
 .quiz-media {
   display: flex;
   justify-content: center;
@@ -383,17 +375,34 @@ body {
   background: radial-gradient(circle at top, #020617, #020617);
 }
 
+.quiz-question {
+  margin-bottom: 0.8rem;
+  font-size: 1.1rem;
+}
+
 /* Réponses */
+.answers-grid {
+  display: grid;
+  gap: 0.8rem;
+}
+
+@media (min-width: 600px) {
+  .answers-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* bouton de réponse : horizontal (image + texte) */
 .answer-btn {
   width: 100%;
   justify-content: flex-start;
   gap: 0.6rem;
 }
 
-/* petite image dans les propositions CODE -> NOM */
+/* petite image dans les options "code -> produit" */
 .answer-image-wrapper {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border-radius: 999px;
   overflow: hidden;
   flex-shrink: 0;
@@ -409,7 +418,6 @@ body {
   flex: 1;
   text-align: left;
 }
-
 
 /* Styles des réponses selon la correction */
 .answer-correct {
@@ -477,4 +485,3 @@ body {
     justify-content: flex-start;
   }
 }
-
