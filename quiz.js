@@ -62,22 +62,44 @@ document.addEventListener("DOMContentLoaded", () => {
     return `${m}:${s}`;
   }
 
+  // Renvoie jusqu'à `maxCount` produits différents du produit donné,
+  // en priorisant ceux de la même catégorie.
+  function getWrongProductsFor(product, maxCount) {
+    const sameCategory = shuffleArray(
+      products.filter(
+        (p) => p.code !== product.code && p.category === product.category
+      )
+    );
+
+    let wrong = sameCategory.slice(0, maxCount);
+
+    if (wrong.length < maxCount) {
+      const remaining = maxCount - wrong.length;
+      const alreadyIds = new Set([product.code, ...wrong.map((p) => p.code)]);
+
+      const others = shuffleArray(
+        products.filter((p) => !alreadyIds.has(p.code))
+      );
+
+      wrong = wrong.concat(others.slice(0, remaining));
+    }
+
+    return wrong;
+  }
+
   // --------- Génération des questions ----------
-  // On unifie le format des options :
+  // Format des options :
   // question.options = [ { label: string, product: { ... } }, ... ]
   function generateQuestionFromProduct(product) {
-    // type 0 => "Quel est le code pour Chocolatine ?"
+    // type 0 => "Quel est le code pour Avocat ?"
     // type 1 => "Quel produit correspond au code 55 ?"
     const type = Math.random() < 0.5 ? 0 : 1;
 
+    const wrongProducts = getWrongProductsFor(product, 3);
+    const optionProducts = shuffleArray([product, ...wrongProducts]);
+
     if (type === 0) {
-      // NOM -> CODE : on montre l'image du produit en haut
-      const wrongProducts = shuffleArray(
-        products.filter((p) => p.code !== product.code)
-      ).slice(0, 3);
-
-      const optionProducts = shuffleArray([product, ...wrongProducts]);
-
+      // NOM -> CODE : image du produit en haut, réponses = codes (sans images)
       const options = optionProducts.map((p) => ({
         label: String(p.code),
         product: p,
@@ -85,19 +107,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
       return {
         type: "NAME_TO_CODE",
-        product, // utilisé pour l'image de la question
+        product,
         questionText: `Quel est le code PLU pour : « ${product.name} » ?`,
         correctAnswer: String(product.code),
         options,
       };
     } else {
-      // CODE -> NOM : pas d'image en haut, mais chaque réponse a son image
-      const wrongProducts = shuffleArray(
-        products.filter((p) => p.code !== product.code)
-      ).slice(0, 3);
-
-      const optionProducts = shuffleArray([product, ...wrongProducts]);
-
+      // CODE -> NOM : pas d'image en haut, réponses = produits avec images
       const options = optionProducts.map((p) => ({
         label: p.name,
         product: p,
@@ -105,7 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       return {
         type: "CODE_TO_NAME",
-        product, // si un jour tu veux l'utiliser
+        product,
         questionText: `Quel produit correspond au code PLU : ${product.code} ?`,
         correctAnswer: product.name,
         options,
@@ -164,9 +180,9 @@ document.addEventListener("DOMContentLoaded", () => {
     questionTextEl.textContent = question.questionText;
     answersContainer.innerHTML = "";
 
-    // Gestion de l'image de la question :
-    // - NAME_TO_CODE -> on montre l'image du produit
-    // - CODE_TO_NAME -> on la cache (sinon on donne la réponse)
+    // Image de la question :
+    // - NAME_TO_CODE => on montre l'image du produit
+    // - CODE_TO_NAME => pas d'image (sinon on donne la réponse)
     if (
       question.type === "NAME_TO_CODE" &&
       question.product &&
@@ -183,15 +199,15 @@ document.addEventListener("DOMContentLoaded", () => {
       questionImageEl.style.display = "none";
     }
 
-    // Réponses :
+    // Réponses
     question.options.forEach((opt) => {
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "btn answer-btn";
       btn.dataset.value = opt.label;
 
-      // Si on est sur CODE_TO_NAME, on ajoute une petite image dans chaque option
       if (question.type === "CODE_TO_NAME" && opt.product && opt.product.image) {
+        // On affiche une petite image + le nom
         const imgWrapper = document.createElement("div");
         imgWrapper.className = "answer-image-wrapper";
 
@@ -210,7 +226,7 @@ document.addEventListener("DOMContentLoaded", () => {
         btn.appendChild(imgWrapper);
         btn.appendChild(labelSpan);
       } else {
-        // Cas NAME_TO_CODE : on affiche juste le texte (code PLU)
+        // Cas NAME_TO_CODE : réponses textuelles (codes)
         btn.textContent = opt.label;
       }
 
