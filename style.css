@@ -180,11 +180,14 @@ body {
 }
 
 /* ---------- Grille produits ---------- */
+/* auto-fit + minmax =>
+   - smartphone ~2 colonnes
+   - tablette 3 colonnes
+   - gros écran 4–5 colonnes */
 .product-grid {
   display: grid;
   gap: 1rem;
   margin-top: 1rem;
-  /* auto-fit = 2 colonnes sur mobile, 3–4–5 sur écrans plus grands */
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
 }
 
@@ -207,7 +210,7 @@ body {
   border-color: rgba(56, 189, 248, 0.7);
 }
 
-/* toutes les images produits sont des carrés */
+/* toutes les images produits sont carrées et recadrées */
 .product-image-wrapper {
   position: relative;
   width: 100%;
@@ -357,7 +360,12 @@ body {
   }
 }
 
-/* Image principale du quiz (pour les questions "Quel est le code de ... ?") */
+.quiz-question {
+  margin-bottom: 0.8rem;
+  font-size: 1.1rem;
+}
+
+/* Image du quiz (question "Quel est le code de ... ?") */
 .quiz-media {
   display: flex;
   justify-content: center;
@@ -375,12 +383,7 @@ body {
   background: radial-gradient(circle at top, #020617, #020617);
 }
 
-.quiz-question {
-  margin-bottom: 0.8rem;
-  font-size: 1.1rem;
-}
-
-/* Réponses */
+/* ---------- Réponses du quiz ---------- */
 .answers-grid {
   display: grid;
   gap: 0.8rem;
@@ -397,23 +400,30 @@ body {
   width: 100%;
   justify-content: flex-start;
   gap: 0.6rem;
+  align-items: center;
 }
 
-/* petite image dans les options "code -> produit" */
+/* petite image dans les propositions "code -> produit" */
 .answer-image-wrapper {
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   border-radius: 999px;
   overflow: hidden;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.answer-image {
-  width: 100%;
-  height: 100%;
+/* >>> ICI : on force la taille de l'image <<< */
+.answer-btn img.answer-image {
+  width: 48px !important;
+  height: 48px !important;
+  display: block;
   object-fit: cover;
 }
 
+/* texte de la réponse */
 .answer-label {
   flex: 1;
   text-align: left;
