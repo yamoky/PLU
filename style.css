@@ -384,21 +384,32 @@ body {
 }
 
 /* Réponses */
-.answers-grid {
-  display: grid;
-  gap: 0.8rem;
-}
-
-@media (min-width: 600px) {
-  .answers-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
 .answer-btn {
   width: 100%;
   justify-content: flex-start;
+  gap: 0.6rem;
 }
+
+/* petite image dans les propositions CODE -> NOM */
+.answer-image-wrapper {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.answer-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.answer-label {
+  flex: 1;
+  text-align: left;
+}
+
 
 /* Styles des réponses selon la correction */
 .answer-correct {
@@ -466,3 +477,4 @@ body {
     justify-content: flex-start;
   }
 }
+
