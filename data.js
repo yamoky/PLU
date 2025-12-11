@@ -127,7 +127,7 @@ window.PLU_DATA = (function () {
       code: "18",
       name: "Pomme bicolore",
       nom: "Pomme bicolore",
-      image: "assets/pomme_gala.jpg",
+      image: "assets/pomme_bicolore_vrac.jpg",
       category: "fruits_legumes",
     },
     {
@@ -148,7 +148,7 @@ window.PLU_DATA = (function () {
     // Boulangerie
     {
       code: "50",
-      name: "Chocolatine",
+      name: "Pain au chocolat / Chocolatine",
       nom: "Chocolatine",
       image: "assets/pain_chocolat_pur_beurre.jpg",
       category: "boulangerie",
@@ -220,3 +220,4 @@ window.PLU_DATA = (function () {
 
   return { products };
 })();
+
