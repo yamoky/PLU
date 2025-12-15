@@ -145,6 +145,13 @@ window.PLU_DATA = (function () {
       category: "fruits_legumes",
     },
     {
+      code: "111",
+      name: "clementine orri",
+      nom: "clementine orri",
+      image: "assets/clementine_orri.jpg",
+      category: "fruits_legumes",
+    },
+    {
       code: "144",
       name: "Raisin",
       nom: "Raisin",
@@ -170,13 +177,6 @@ window.PLU_DATA = (function () {
       name: "Tomate charnue",
       nom: "Tomate charnue",
       image: "assets/tomate_charnue.jpg",
-      category: "fruits_legumes",
-    },
-    {
-      code: "444",
-      name: "clementine orri",
-      nom: "clementine orri",
-      image: "assets/clementine_orri.jpg",
       category: "fruits_legumes",
     },
     {
