@@ -1,15 +1,18 @@
 // script.js
-// Logique de la page d'accueil : recherche + liste des produits
+// Logique de la page d'accueil : recherche + liste des produits par catégorie
 
 document.addEventListener("DOMContentLoaded", () => {
   const products = (window.PLU_DATA && window.PLU_DATA.products) || [];
 
   const searchInput = document.getElementById("searchInput");
-  const productGrid = document.getElementById("productGrid");
   const productCountLabel = document.getElementById("productCountLabel");
   const toggleListButton = document.getElementById("toggleListButton");
   const noResultsMessage = document.getElementById("noResultsMessage");
   const scrollTopBtn = document.getElementById("scrollTopBtn");
+
+  const productListsWrapper = document.getElementById("productListsWrapper");
+  const gridFruits = document.getElementById("gridFruits");
+  const gridBoulangerie = document.getElementById("gridBoulangerie");
 
   let listVisible = true;
 
@@ -60,20 +63,31 @@ document.addEventListener("DOMContentLoaded", () => {
     return card;
   }
 
-  function renderProducts(list) {
-    productGrid.innerHTML = "";
+  function renderCategory(gridElement, list) {
+    gridElement.innerHTML = "";
+    list.forEach((p) => {
+      const card = createProductCard(p);
+      gridElement.appendChild(card);
+    });
+  }
 
-    if (!list.length) {
+  function renderProductsByCategory(list) {
+    // Séparation par catégorie
+    const fruits = list.filter((p) => p.category === "fruits_legumes");
+    const boulangerie = list.filter((p) => p.category === "boulangerie");
+
+    renderCategory(gridFruits, fruits);
+    renderCategory(gridBoulangerie, boulangerie);
+
+    const total = list.length;
+    updateProductCount(total);
+
+    // Message "aucun résultat"
+    if (total === 0) {
       noResultsMessage.hidden = false;
     } else {
       noResultsMessage.hidden = true;
-      list.forEach((p) => {
-        const card = createProductCard(p);
-        productGrid.appendChild(card);
-      });
     }
-
-    updateProductCount(list.length);
   }
 
   function normalize(str) {
@@ -84,7 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const query = normalize(searchInput.value);
 
     if (!query) {
-      renderProducts(products);
+      renderProductsByCategory(products);
       return;
     }
 
@@ -99,28 +113,31 @@ document.addEventListener("DOMContentLoaded", () => {
       );
     });
 
-    renderProducts(filtered);
+    renderProductsByCategory(filtered);
   }
 
-  // Recherche en temps réel
+  // Recherche live
   if (searchInput) {
     searchInput.addEventListener("input", filterProducts);
   }
 
-  // Bouton afficher / masquer
+  // Afficher / masquer toute la liste (les deux catégories)
   if (toggleListButton) {
     toggleListButton.addEventListener("click", () => {
       listVisible = !listVisible;
 
       if (listVisible) {
-        productGrid.style.display = "grid";
-        // Ré-affiche éventuellement le message "aucun résultat"
-        if (!productGrid.children.length) {
+        productListsWrapper.style.display = "block";
+        // Si aucun produit n'est affiché, on montre le message
+        if (
+          !gridFruits.children.length &&
+          !gridBoulangerie.children.length
+        ) {
           noResultsMessage.hidden = false;
         }
         toggleListButton.textContent = "Masquer la liste";
       } else {
-        productGrid.style.display = "none";
+        productListsWrapper.style.display = "none";
         noResultsMessage.hidden = true;
         toggleListButton.textContent = "Afficher la liste";
       }
@@ -142,6 +159,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Premier rendu
-  renderProducts(products);
+  // Premier rendu : tous les produits, triés par catégorie
+  renderProductsByCategory(products);
 });
