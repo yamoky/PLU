@@ -34,6 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const mistakesList = document.getElementById("mistakesList");
   const restartQuizBtn = document.getElementById("restartQuizBtn");
 
+  // État du quiz
   let questions = [];
   let currentQuestionIndex = 0;
   let timerSecondsRemaining = 0;
@@ -44,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
     errors: 0,
     answersLog: [],
   };
-  let currentMode = "mcq";
+  let currentMode = "mcq"; // "mcq" ou "typing"
   let currentQuestion = null;
   let questionLocked = false;
 
@@ -68,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return `${m}:${s}`;
   }
 
-  // Renvoie jusqu'à `maxCount` produits différents du produit donné,
+  // Renvoie jusqu'à `maxCount` produits différents,
   // en priorisant ceux de la même catégorie.
   function getWrongProductsFor(product, maxCount) {
     const sameCategory = shuffleArray(
@@ -91,11 +92,11 @@ document.addEventListener("DOMContentLoaded", () => {
     return wrong;
   }
 
-  // --------- Génération des questions ----------
-  function generateMcqQuestionFromProduct(product) {
-    // 2 types : nom -> code OU code -> nom
-    const type = Math.random() < 0.5 ? "NAME_TO_CODE" : "CODE_TO_NAME";
+  // ---------- Génération des questions ----------
 
+  // QCM : 2 types (nom -> code, code -> nom)
+  function generateMcqQuestionFromProduct(product) {
+    const type = Math.random() < 0.5 ? "NAME_TO_CODE" : "CODE_TO_NAME";
     const wrongProducts = getWrongProductsFor(product, 3);
     const optionProducts = shuffleArray([product, ...wrongProducts]);
 
@@ -130,7 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Saisie : image -> code
+  // Saisie du code à partir de l'image
   function generateTypingQuestionFromProduct(product) {
     return {
       mode: "typing",
@@ -142,7 +143,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  // Aucun produit ne se répète dans une session
+  // Un produit ne peut apparaître qu'une seule fois par session
   function generateQuestions(count, mode) {
     if (!products.length) return [];
 
@@ -159,7 +160,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // --------- Timer ----------
+  // ---------- Timer ----------
   function startTimer(totalSeconds) {
     timerSecondsRemaining = totalSeconds;
     timerDisplay.textContent = formatTime(timerSecondsRemaining);
@@ -183,7 +184,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // --------- Affichage d'une question ----------
+  // ---------- Affichage d'une question ----------
   function displayQuestion() {
     const question = questions[currentQuestionIndex];
     currentQuestion = question;
@@ -195,18 +196,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     currentQuestionIndexEl.textContent = currentQuestionIndex + 1;
     totalQuestionsEl.textContent = questions.length;
-
     questionTextEl.textContent = question.questionText;
-    answersContainer.innerHTML = "";
 
-    // Réinitialise les deux modes
+    // Reset des deux conteneurs
+    answersContainer.innerHTML = "";
     answersContainer.style.display = "none";
     typingContainer.hidden = true;
 
-    // Image
+    // Gestion de l'image
     if (question.product && question.product.image && questionImageEl) {
       if (question.mode === "mcq" && question.type === "CODE_TO_NAME") {
-        // Dans ce cas on NE montre pas l'image (sinon c'est la réponse)
+        // En QCM "code -> produit" on NE montre pas l'image (sinon c'est la réponse)
         questionImageEl.style.display = "none";
       } else {
         questionImageEl.src = question.product.image;
@@ -220,53 +220,57 @@ document.addEventListener("DOMContentLoaded", () => {
       questionImageEl.style.display = "none";
     }
 
+    // Mode saisie du code
     if (question.mode === "typing") {
-      // Mode saisie de code
       typingContainer.hidden = false;
+      answersContainer.style.display = "none"; // On s'assure de le masquer
       typingInput.value = "";
       typingInput.classList.remove(
         "typing-input-correct",
         "typing-input-wrong"
       );
       typingInput.focus();
-    } else {
-      // Mode QCM
-      answersContainer.style.display = "grid";
-      question.options.forEach((opt) => {
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "btn answer-btn";
-        btn.dataset.value = opt.label;
-
-        if (question.type === "CODE_TO_NAME" && opt.product && opt.product.image) {
-          const imgWrapper = document.createElement("div");
-          imgWrapper.className = "answer-image-wrapper";
-
-          const img = document.createElement("img");
-          img.className = "answer-image";
-          img.src = opt.product.image;
-          img.alt = opt.product.name || "Produit";
-          img.loading = "lazy";
-
-          imgWrapper.appendChild(img);
-
-          const labelSpan = document.createElement("span");
-          labelSpan.className = "answer-label";
-          labelSpan.textContent = opt.label;
-
-          btn.appendChild(imgWrapper);
-          btn.appendChild(labelSpan);
-        } else {
-          btn.textContent = opt.label;
-        }
-
-        btn.addEventListener("click", () => handleMcqAnswer(btn, question));
-        answersContainer.appendChild(btn);
-      });
+      return;
     }
+
+    // Mode QCM
+    answersContainer.style.display = "grid";
+    typingContainer.hidden = true; // <=== IMPORTANT : on cache le champ de saisie
+
+    question.options.forEach((opt) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "btn answer-btn";
+      btn.dataset.value = opt.label;
+
+      if (question.type === "CODE_TO_NAME" && opt.product && opt.product.image) {
+        const imgWrapper = document.createElement("div");
+        imgWrapper.className = "answer-image-wrapper";
+
+        const img = document.createElement("img");
+        img.className = "answer-image";
+        img.src = opt.product.image;
+        img.alt = opt.product.name || "Produit";
+        img.loading = "lazy";
+
+        imgWrapper.appendChild(img);
+
+        const labelSpan = document.createElement("span");
+        labelSpan.className = "answer-label";
+        labelSpan.textContent = opt.label;
+
+        btn.appendChild(imgWrapper);
+        btn.appendChild(labelSpan);
+      } else {
+        btn.textContent = opt.label;
+      }
+
+      btn.addEventListener("click", () => handleMcqAnswer(btn, question));
+      answersContainer.appendChild(btn);
+    });
   }
 
-  // --------- Réponse QCM ----------
+  // ---------- Réponse QCM ----------
   function handleMcqAnswer(button, question) {
     if (questionLocked) return;
     questionLocked = true;
@@ -291,7 +295,7 @@ document.addEventListener("DOMContentLoaded", () => {
     registerAnswer(question, selectedValue, isCorrect);
   }
 
-  // --------- Réponse saisie de code ----------
+  // ---------- Réponse saisie de code ----------
   function handleTypingAnswer() {
     if (questionLocked) return;
     if (!currentQuestion || currentQuestion.mode !== "typing") return;
@@ -311,7 +315,7 @@ document.addEventListener("DOMContentLoaded", () => {
     registerAnswer(currentQuestion, rawValue, isCorrect);
   }
 
-  // --------- Enregistrement commun ----------
+  // ---------- Enregistrement commun ----------
   function registerAnswer(question, userValue, isCorrect) {
     stats.totalAsked += 1;
     if (isCorrect) {
@@ -346,7 +350,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 600);
   }
 
-  // --------- Fin du quiz ----------
+  // ---------- Fin du quiz ----------
   function endQuiz() {
     stopTimer();
     quizPanel.hidden = true;
@@ -413,7 +417,7 @@ document.addEventListener("DOMContentLoaded", () => {
     currentQuestion = null;
   }
 
-  // --------- Écouteurs ----------
+  // ---------- Écouteurs ----------
   quizConfigForm.addEventListener("submit", (event) => {
     event.preventDefault();
 
