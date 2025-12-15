@@ -7,7 +7,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
     />
-    <link rel="stylesheet" href="style.css?v=6" />
+    <link rel="stylesheet" href="style.css?v=8" />
   </head>
   <body>
     <header class="site-header">
@@ -24,7 +24,7 @@
     </header>
 
     <main class="container main-content">
-      <!-- Recherche -->
+      <!-- Bloc recherche -->
       <section class="card">
         <h1>Rechercher un produit PLU</h1>
         <p class="section-description">
@@ -49,14 +49,27 @@
         </div>
       </section>
 
-      <!-- Liste des produits -->
+      <!-- Bloc liste produits par catégorie -->
       <section class="card">
         <h2>Liste des produits</h2>
         <p class="section-description">
-          Visualise tous les produits avec leur image, leur nom et leur code PLU.
+          Visualise tous les produits avec leur image, leur nom et leur code PLU,
+          séparés par catégorie.
         </p>
 
-        <div id="productGrid" class="product-grid"></div>
+        <div id="productListsWrapper">
+          <!-- Fruits & légumes -->
+          <section class="category-section">
+            <h3 class="category-title">Fruits &amp; légumes</h3>
+            <div id="gridFruits" class="product-grid"></div>
+          </section>
+
+          <!-- Boulangerie -->
+          <section class="category-section">
+            <h3 class="category-title">Boulangerie</h3>
+            <div id="gridBoulangerie" class="product-grid"></div>
+          </section>
+        </div>
 
         <p id="noResultsMessage" class="no-results" hidden>
           Aucun produit ne correspond à ta recherche.
