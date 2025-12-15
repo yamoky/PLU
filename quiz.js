@@ -129,17 +129,20 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // Ici on garantit qu'un produit ne sera utilisé qu'une seule fois
   function generateQuestions(count) {
-    const availableCount = Math.min(count, products.length * 2);
-    const selectedQuestions = [];
+    if (!products.length) return [];
 
-    for (let i = 0; i < availableCount; i++) {
-      const randomProduct =
-        products[Math.floor(Math.random() * products.length)];
-      selectedQuestions.push(generateQuestionFromProduct(randomProduct));
-    }
+    const maxQuestions = products.length;
+    const finalCount = Math.min(count, maxQuestions);
 
-    return selectedQuestions;
+    // On mélange la liste des produits UNE fois
+    const shuffledProducts = shuffleArray(products).slice(0, finalCount);
+
+    // Pour chaque produit, on génère UNE question (type aléatoire)
+    return shuffledProducts.map((product) =>
+      generateQuestionFromProduct(product)
+    );
   }
 
   // --------- Timer ----------
@@ -362,7 +365,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const questionCount = parseInt(questionCountInput.value, 10);
+    let questionCount = parseInt(questionCountInput.value, 10);
     const durationMinutes = parseInt(quizDurationInput.value, 10);
 
     if (!Number.isFinite(questionCount) || questionCount <= 0) {
@@ -373,6 +376,15 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!Number.isFinite(durationMinutes) || durationMinutes <= 0) {
       alert("Merci de saisir une durée de session valide (en minutes).");
       return;
+    }
+
+    const maxQuestions = products.length;
+    if (questionCount > maxQuestions) {
+      alert(
+        `Il y a ${maxQuestions} produits différents. Le nombre de questions est limité à ${maxQuestions} pour éviter les répétitions.`
+      );
+      questionCount = maxQuestions;
+      questionCountInput.value = String(maxQuestions);
     }
 
     resetQuizState();
