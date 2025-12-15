@@ -335,4 +335,193 @@ body {
 
 .quiz-timer span {
   font-weight: 600;
-  c
+  color: #fbbf24;
+}
+
+.quiz-progress {
+  font-weight: 500;
+  color: #e5e7eb;
+}
+
+.quiz-body {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .quiz-body {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.4fr);
+    align-items: center;
+    gap: 1.5rem;
+  }
+}
+
+/* Image de la question (pour les questions "Quel est le code pour ... ?") */
+.quiz-media {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+.quiz-image {
+  width: 100%;
+  max-width: 220px;
+  aspect-ratio: 1 / 1;
+  border-radius: 0.9rem;
+  object-fit: cover;
+  border: 1px solid rgba(148, 163, 184, 0.7);
+  box-shadow: 0 16px 35px rgba(15, 23, 42, 0.8);
+  background: radial-gradient(circle at top, #020617, #020617);
+}
+
+.quiz-question {
+  margin-bottom: 0.8rem;
+  font-size: 1.1rem;
+}
+
+/* ---------- Réponses QCM ---------- */
+.answers-grid {
+  display: grid;
+  gap: 0.8rem;
+}
+
+@media (min-width: 600px) {
+  .answers-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.answer-btn {
+  width: 100%;
+  justify-content: flex-start;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.answer-image-wrapper {
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.answer-btn img.answer-image {
+  width: 48px !important;
+  height: 48px !important;
+  display: block;
+  object-fit: cover;
+}
+
+.answer-label {
+  flex: 1;
+  text-align: left;
+}
+
+/* Styles de correction */
+.answer-correct {
+  background: rgba(22, 163, 74, 0.18);
+  border: 1px solid rgba(34, 197, 94, 0.8);
+  color: #bbf7d0;
+}
+
+.answer-wrong {
+  background: rgba(220, 38, 38, 0.18);
+  border: 1px solid rgba(248, 113, 113, 0.8);
+  color: #fecaca;
+}
+
+.answer-selected {
+  transform: translateY(-1px);
+}
+
+/* ---------- Mode saisie du code ---------- */
+.typing-container {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.typing-container input {
+  border-radius: 0.6rem;
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  background: rgba(15, 23, 42, 0.9);
+  color: #e5e7eb;
+  padding: 0.6rem 0.8rem;
+  font-size: 1rem;
+  outline: none;
+}
+
+.typing-container input:focus {
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.7);
+}
+
+.typing-helper {
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+
+.typing-input-correct {
+  border-color: #22c55e !important;
+  box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.7) !important;
+}
+
+.typing-input-wrong {
+  border-color: #f97373 !important;
+  box-shadow: 0 0 0 1px rgba(248, 113, 113, 0.7) !important;
+}
+
+/* ---------- Résultats ---------- */
+.results-summary {
+  display: grid;
+  gap: 0.3rem;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.mistakes-list {
+  display: grid;
+  gap: 0.8rem;
+  margin: 1rem 0 1.2rem;
+}
+
+.mistake-card {
+  border-radius: 0.8rem;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  padding: 0.7rem 0.8rem;
+  background: radial-gradient(circle at top, #020617, #020617);
+  font-size: 0.9rem;
+}
+
+.mistake-card h4 {
+  margin-bottom: 0.4rem;
+  font-size: 0.9rem;
+  color: #f97316;
+}
+
+/* ---------- Footer ---------- */
+.site-footer {
+  border-top: 1px solid rgba(148, 163, 184, 0.3);
+  padding: 0.8rem 0;
+  font-size: 0.8rem;
+  color: #9ca3af;
+  background: rgba(15, 23, 42, 0.95);
+}
+
+/* ---------- Responsiveness divers ---------- */
+@media (max-width: 640px) {
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav-actions {
+    align-self: stretch;
+    justify-content: flex-start;
+  }
+}
