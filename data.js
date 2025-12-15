@@ -144,6 +144,42 @@ window.PLU_DATA = (function () {
       image: "assets/patate_douce_vrac.jpg",
       category: "fruits_legumes",
     },
+    // Nouveaux produits ajoutés - Fruits & légumes
+    {
+      code: "455",
+      name: "Mandarine",
+      nom: "Mandarine",
+      image: "assets/mandarine.jpg",
+      category: "fruits_legumes",
+    },
+    {
+      code: "144",
+      name: "Raisin",
+      nom: "Raisin",
+      image: "assets/raisin_vrac.jpg",
+      category: "fruits_legumes",
+    },
+    {
+      code: "236",
+      name: "Tomate charnue",
+      nom: "Tomate charnue",
+      image: "assets/tomate_charnue.jpg",
+      category: "fruits_legumes",
+    },
+    {
+      code: "170",
+      name: "Pommes Pink Lady",
+      nom: "Pommes Pink Lady",
+      image: "assets/pommes_pink_lady.jpg",
+      category: "fruits_legumes",
+    },
+    {
+      code: "165",
+      name: "Kiwi gold",
+      nom: "Kiwi gold",
+      image: "assets/kiwi_gold.jpg",
+      category: "fruits_legumes",
+    },
 
     // Boulangerie
     {
@@ -216,8 +252,43 @@ window.PLU_DATA = (function () {
       image: "assets/pain_aux_raisins.jpg",
       category: "boulangerie",
     },
+    // Nouveaux produits ajoutés - Boulangerie (incluant les items "traiteur")
+    {
+      code: "508",
+      name: "Pastel de Nata",
+      nom: "Pastel de Nata",
+      image: "assets/pastel_de_nata.jpg",
+      category: "boulangerie",
+    },
+    {
+      code: "664",
+      name: "Empanadas boeuf",
+      nom: "Empanadas boeuf",
+      image: "assets/empanadas_boeuf.jpg",
+      category: "boulangerie",
+    },
+    {
+      code: "606",
+      name: "Mini beignets",
+      nom: "Mini beignets",
+      image: "assets/mini_beignets.jpg",
+      category: "boulangerie",
+    },
+    {
+      code: "635",
+      name: "Donut chocolat",
+      nom: "Donut chocolat",
+      image: "assets/donut_chocolat.jpg",
+      category: "boulangerie",
+    },
+    {
+      code: "444",
+      name: "Cheesecake",
+      nom: "Cheesecake",
+      image: "assets/cheesecake.jpg",
+      category: "boulangerie",
+    },
   ];
 
   return { products };
 })();
-
