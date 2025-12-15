@@ -145,6 +145,13 @@ window.PLU_DATA = (function () {
       category: "fruits_legumes",
     },
     // Nouveaux produits ajoutés - Fruits & légumes
+        {
+      code: "444",
+      name: "clementine orri",
+      nom: "clementine orri",
+      image: "assets/clementine_orri.jpg",
+      category: "fruits_legumes",
+    },
     {
       code: "455",
       name: "Mandarine",
@@ -281,14 +288,8 @@ window.PLU_DATA = (function () {
       image: "assets/donut_chocolat.jpg",
       category: "boulangerie",
     },
-    {
-      code: "444",
-      name: "Cheesecake",
-      nom: "Cheesecake",
-      image: "assets/cheesecake.jpg",
-      category: "boulangerie",
-    },
   ];
 
   return { products };
 })();
+
