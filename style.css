@@ -144,7 +144,7 @@ body {
   background: rgba(31, 41, 55, 0.9);
 }
 
-/* ---------- Barre de recherche ---------- */
+/* ---------- Barre de recherche (index.html) ---------- */
 .search-bar-wrapper {
   margin-top: 0.5rem;
   margin-bottom: 1rem;
@@ -179,11 +179,7 @@ body {
   color: #9ca3af;
 }
 
-/* ---------- Grille produits ---------- */
-/* auto-fit + minmax =>
-   - smartphone ~2 colonnes
-   - tablette 3 colonnes
-   - gros écran 4–5 colonnes */
+/* ---------- Grille produits (index.html) ---------- */
 .product-grid {
   display: grid;
   gap: 1rem;
@@ -191,7 +187,6 @@ body {
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
 }
 
-/* ---------- Carte produit ---------- */
 .product-card {
   background: radial-gradient(circle at top, #111827, #020617);
   border-radius: 0.9rem;
@@ -210,7 +205,6 @@ body {
   border-color: rgba(56, 189, 248, 0.7);
 }
 
-/* toutes les images produits sont carrées et recadrées */
 .product-image-wrapper {
   position: relative;
   width: 100%;
@@ -225,7 +219,6 @@ body {
   object-fit: cover;
 }
 
-/* fallback si image manquante */
 .product-image-fallback-bg {
   background: radial-gradient(circle, #0f172a, #020617);
 }
@@ -291,7 +284,7 @@ body {
 
 @media (min-width: 640px) {
   .quiz-config-form {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     align-items: end;
   }
 }
@@ -307,16 +300,20 @@ body {
   color: #e5e7eb;
 }
 
-.form-group input {
+/* Inputs + select dans les formulaires */
+.form-group input,
+.form-group select {
   border-radius: 0.6rem;
   border: 1px solid rgba(148, 163, 184, 0.6);
   background: rgba(15, 23, 42, 0.8);
   color: #e5e7eb;
   padding: 0.5rem 0.7rem;
   outline: none;
+  font-size: 0.9rem;
 }
 
-.form-group input:focus {
+.form-group input:focus,
+.form-group select:focus {
   border-color: #38bdf8;
   box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.7);
 }
@@ -338,160 +335,4 @@ body {
 
 .quiz-timer span {
   font-weight: 600;
-  color: #fbbf24;
-}
-
-.quiz-progress {
-  font-weight: 500;
-  color: #e5e7eb;
-}
-
-/* Corps du quiz : image + question + réponses */
-.quiz-body {
-  display: grid;
-  gap: 1rem;
-}
-
-@media (min-width: 768px) {
-  .quiz-body {
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.4fr);
-    align-items: center;
-    gap: 1.5rem;
-  }
-}
-
-.quiz-question {
-  margin-bottom: 0.8rem;
-  font-size: 1.1rem;
-}
-
-/* Image du quiz (question "Quel est le code de ... ?") */
-.quiz-media {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 0.5rem;
-}
-
-.quiz-image {
-  width: 100%;
-  max-width: 220px;
-  aspect-ratio: 1 / 1;
-  border-radius: 0.9rem;
-  object-fit: cover;
-  border: 1px solid rgba(148, 163, 184, 0.7);
-  box-shadow: 0 16px 35px rgba(15, 23, 42, 0.8);
-  background: radial-gradient(circle at top, #020617, #020617);
-}
-
-/* ---------- Réponses du quiz ---------- */
-.answers-grid {
-  display: grid;
-  gap: 0.8rem;
-}
-
-@media (min-width: 600px) {
-  .answers-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-/* bouton de réponse : horizontal (image + texte) */
-.answer-btn {
-  width: 100%;
-  justify-content: flex-start;
-  gap: 0.6rem;
-  align-items: center;
-}
-
-/* petite image dans les propositions "code -> produit" */
-.answer-image-wrapper {
-  width: 48px;
-  height: 48px;
-  border-radius: 999px;
-  overflow: hidden;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* >>> ICI : on force la taille de l'image <<< */
-.answer-btn img.answer-image {
-  width: 48px !important;
-  height: 48px !important;
-  display: block;
-  object-fit: cover;
-}
-
-/* texte de la réponse */
-.answer-label {
-  flex: 1;
-  text-align: left;
-}
-
-/* Styles des réponses selon la correction */
-.answer-correct {
-  background: rgba(22, 163, 74, 0.18);
-  border: 1px solid rgba(34, 197, 94, 0.8);
-  color: #bbf7d0;
-}
-
-.answer-wrong {
-  background: rgba(220, 38, 38, 0.18);
-  border: 1px solid rgba(248, 113, 113, 0.8);
-  color: #fecaca;
-}
-
-.answer-selected {
-  transform: translateY(-1px);
-}
-
-/* ---------- Résultats ---------- */
-.results-summary {
-  display: grid;
-  gap: 0.3rem;
-  font-size: 0.9rem;
-  margin-bottom: 1rem;
-}
-
-.mistakes-list {
-  display: grid;
-  gap: 0.8rem;
-  margin: 1rem 0 1.2rem;
-}
-
-.mistake-card {
-  border-radius: 0.8rem;
-  border: 1px solid rgba(148, 163, 184, 0.5);
-  padding: 0.7rem 0.8rem;
-  background: radial-gradient(circle at top, #020617, #020617);
-  font-size: 0.9rem;
-}
-
-.mistake-card h4 {
-  margin-bottom: 0.4rem;
-  font-size: 0.9rem;
-  color: #f97316;
-}
-
-/* ---------- Footer ---------- */
-.site-footer {
-  border-top: 1px solid rgba(148, 163, 184, 0.3);
-  padding: 0.8rem 0;
-  font-size: 0.8rem;
-  color: #9ca3af;
-  background: rgba(15, 23, 42, 0.95);
-}
-
-/* ---------- Responsiveness divers ---------- */
-@media (max-width: 640px) {
-  .header-content {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .nav-actions {
-    align-self: stretch;
-    justify-content: flex-start;
-  }
-}
+  c
