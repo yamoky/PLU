@@ -7,7 +7,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
     />
-    <link rel="stylesheet" href="style.css?v=2" />
+    <link rel="stylesheet" href="style.css?v=4" />
   </head>
   <body>
     <header class="site-header">
@@ -32,9 +32,10 @@
       <section class="card">
         <h1>Configurer ton quiz</h1>
         <p class="section-description">
-          Choisis le <strong>nombre de questions</strong> et la
-          <strong>durée de la session</strong>. Le quiz s’arrête soit quand le
-          temps est écoulé, soit quand tu as répondu à toutes les questions.
+          Choisis le <strong>nombre de questions</strong>, la
+          <strong>durée de la session</strong> et le
+          <strong>type de quiz</strong>. Le quiz s’arrête soit quand le temps
+          est écoulé, soit quand tu as répondu à toutes les questions.
         </p>
 
         <form id="quizConfigForm" class="quiz-config-form">
@@ -60,6 +61,18 @@
               value="5"
               required
             />
+          </div>
+
+          <div class="form-group">
+            <label for="quizMode">Type de quiz</label>
+            <select id="quizMode">
+              <option value="mcq" selected>
+                QCM (code ↔ produit, avec images)
+              </option>
+              <option value="typing">
+                Saisie du code à partir de l’image
+              </option>
+            </select>
           </div>
 
           <button type="submit" class="btn btn-primary">
@@ -92,7 +105,24 @@
 
           <div>
             <h2 id="questionText" class="quiz-question"></h2>
+
+            <!-- QCM -->
             <div id="answersContainer" class="answers-grid"></div>
+
+            <!-- Mode saisie du code -->
+            <div id="typingContainer" class="typing-container" hidden>
+              <input
+                id="typingInput"
+                type="number"
+                inputmode="numeric"
+                pattern="[0-9]*"
+                placeholder="Tape le code PLU et appuie sur Entrée"
+              />
+              <p id="typingHelper" class="typing-helper">
+                Appuie sur la touche <strong>Entrée</strong> pour valider ta
+                réponse.
+              </p>
+            </div>
           </div>
         </div>
       </section>
