@@ -7,15 +7,13 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
     />
-    <link rel="stylesheet" href="style.css?v=5" />
+    <link rel="stylesheet" href="style.css?v=6" />
   </head>
   <body>
     <header class="site-header">
       <div class="container header-content">
         <div class="logo-area">
-          <span class="logo">
-            PLU<span class="logo-accent">Formation</span>
-          </span>
+          <span class="logo">PLU<span class="logo-accent">Formation</span></span>
           <p class="logo-subtitle">Mémorise les codes PLU facilement</p>
         </div>
 
@@ -26,12 +24,12 @@
     </header>
 
     <main class="container main-content">
-      <!-- Bloc recherche -->
+      <!-- Recherche -->
       <section class="card">
         <h1>Rechercher un produit PLU</h1>
         <p class="section-description">
-          Tape un <strong>code PLU</strong> ou le
-          <strong>nom du produit</strong> pour le retrouver rapidement.
+          Tape un <strong>code PLU</strong> ou le <strong>nom du produit</strong>
+          pour le retrouver rapidement.
         </p>
 
         <div class="search-bar-wrapper">
@@ -44,22 +42,21 @@
         </div>
 
         <div class="search-meta">
-          <span id="resultsCount">0 produit</span>
-          <button id="toggleListBtn" class="btn btn-secondary">
+          <span id="productCountLabel">0 produit</span>
+          <button id="toggleListButton" class="btn btn-secondary">
             Masquer la liste
           </button>
         </div>
       </section>
 
-      <!-- Bloc liste des produits -->
+      <!-- Liste des produits -->
       <section class="card">
         <h2>Liste des produits</h2>
         <p class="section-description">
-          Visualise tous les produits avec leur image, leur nom et leur code
-          PLU.
+          Visualise tous les produits avec leur image, leur nom et leur code PLU.
         </p>
 
-        <div id="productsGrid" class="product-grid"></div>
+        <div id="productGrid" class="product-grid"></div>
 
         <p id="noResultsMessage" class="no-results" hidden>
           Aucun produit ne correspond à ta recherche.
@@ -84,7 +81,6 @@
       </div>
     </footer>
 
-    <!-- IMPORTANT : data.js AVANT script.js -->
     <script src="data.js" defer></script>
     <script src="script.js" defer></script>
   </body>
