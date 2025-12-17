@@ -152,14 +152,14 @@ window.PLU_DATA = (function () {
       category: "fruits_legumes",
     },
     {
-      code: "144",
+      code: "114",
       name: "Raisin",
       nom: "Raisin",
       image: "assets/raisin_vrac.jpg",
       category: "fruits_legumes",
     },
     {
-      code: "165",
+      code: "155",
       name: "Kiwi gold",
       nom: "Kiwi gold",
       image: "assets/kiwi_gold.jpg",
@@ -173,7 +173,7 @@ window.PLU_DATA = (function () {
       category: "fruits_legumes",
     },
     {
-      code: "236",
+      code: "234",
       name: "Tomate charnue",
       nom: "Tomate charnue",
       image: "assets/tomate_charnue.jpg",
