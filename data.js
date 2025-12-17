@@ -153,13 +153,13 @@ window.PLU_DATA = (function () {
     },
     {
       code: "114",
-      name: "Raisin",
-      nom: "Raisin",
+      name: "Raisins vracs",
+      nom: "Raisins vracs",
       image: "assets/raisin_vrac.jpg",
       category: "fruits_legumes",
     },
     {
-      code: "155",
+      code: "165",
       name: "Kiwi gold",
       nom: "Kiwi gold",
       image: "assets/kiwi_gold.jpg",
@@ -180,7 +180,7 @@ window.PLU_DATA = (function () {
       category: "fruits_legumes",
     },
     {
-      code: "455",
+      code: "155",
       name: "Mandarine",
       nom: "Mandarine",
       image: "assets/mandarine.jpg",
